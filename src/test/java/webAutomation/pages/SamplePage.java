@@ -12,15 +12,6 @@ public class SamplePage extends PageActionManager {
         super(context);
     }
 
-    @FindBy(id = "user-name")
-    private WebElement userNameField;
-
-    @FindBy(id = "password")
-    private WebElement passwordField;
-
-    @FindBy(id = "login-button")
-    private WebElement loginButton;
-
     @FindBy(id = "add-to-cart")
     private WebElement addToCartButton;
 
@@ -41,23 +32,12 @@ public class SamplePage extends PageActionManager {
 
 
 
-
-
-
-
-
-    public void login(String username, String password) {
-        type(userNameField, username);
-        type(passwordField, password);
-        click(loginButton);
-        waitForElementToBeVisible(titleField);
-    }
-
     public void addItemToCart(String itemName) {
         clickByText(itemName);
         waitForElementToBeInvisible(titleField, 3);
         click(addToCartButton);
         click(backToProductsButton);
+        addSuccessLabel("Item "+itemName+"added to cart");
     }
 
     public void viewCartAndVerifyItems(String... items) {
@@ -66,6 +46,7 @@ public class SamplePage extends PageActionManager {
         for (String item : items) {
             validateText(item);
         }
+        addSuccessLabelWithScreenshot("Items verified in cart");
     }
 
     public void removeItemFromCart(String itemName) {

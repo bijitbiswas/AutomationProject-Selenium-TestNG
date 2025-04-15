@@ -4,8 +4,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import webAutomation.utilities.automationFunctions.InteractionFunction;
+import webAutomation.utilities.automationFunctions.ReportingFunction;
 import webAutomation.utilities.automationFunctions.ValidationFunction;
 import webAutomation.utilities.automationInterfaces.InteractionInterface;
+import webAutomation.utilities.automationInterfaces.ReportingInterface;
 import webAutomation.utilities.automationInterfaces.ValidationInterface;
 
 // PageActionsManager is the main controller to send the context(driver, wait etc.) to the actual implementation
@@ -18,7 +20,7 @@ public class PageActionManager implements
     private final ValidationInterface validationInterface;
 //    private final MobileGeneralInterface mobileGeneralInterface;
 //    private final ImageInterface imageInterface;
-//    private final ReportingInterface reportingInterface;
+    private final ReportingInterface reportingInterface;
 
     public PageActionManager(ContextManager context) {
         // To initialize the page elements in a generic way
@@ -29,7 +31,7 @@ public class PageActionManager implements
         this.validationInterface = new ValidationFunction(context);
 //        this.mobileGeneralInterface = new MobileGeneralFunction(context);
 //        this.imageInterface = new ImageFunction(context);
-//        this.reportingInterface = new ReportingFunction(context);
+        this.reportingInterface = new ReportingFunction(context);
     }
 
 
@@ -59,9 +61,7 @@ public class PageActionManager implements
     }
 
 
-    //
-//
-//
+
 //    // ================== Validation Functions ==================
 //
     public void waitForElementToBeVisible(WebElement element) {
@@ -191,12 +191,12 @@ public class PageActionManager implements
 //    }
 //
 //
-//    // ================== Reporting Functions ==================
-//    public void addSuccessLabelWithScreenshot(String labelName) {
-//        reportingInterface.addSuccessLabelWithScreenshot(labelName);
-//    }
-//
-//    public void addSuccessLabel(String labelName) {
-//        reportingInterface.addSuccessLabel(labelName);
-//    }
+    // ================== Reporting Functions ==================
+    public void addSuccessLabelWithScreenshot(String labelName) {
+        reportingInterface.addSuccessLabelWithScreenshot(labelName);
+    }
+
+    public void addSuccessLabel(String labelName) {
+        reportingInterface.addSuccessLabel(labelName);
+    }
 }

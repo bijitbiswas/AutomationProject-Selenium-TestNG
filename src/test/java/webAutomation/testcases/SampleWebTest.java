@@ -1,36 +1,43 @@
 package webAutomation.testcases;
 
 import org.testng.annotations.Test;
+import webAutomation.pages.SampleLoginPage;
 import webAutomation.pages.SamplePage;
 import webAutomation.utilities.DriverManager;
 
 
 public class SampleWebTest extends DriverManager {
 
-    SamplePage page;
+    SampleLoginPage loginPg;
+    SamplePage samplePg;
 
     @Test(
             groups = {"Smoke", "Regression"},
             dataProvider = "getTestData",
-            description = "This is a sample TestNG test"
+            description = "Login and add items to cart"
     )
-    public void addAndRemoveCartItem(String userName, String password) {
-        System.out.println("Starting Sample Test");
+    public void addItemsToCart(String userName, String password) {
 
-        page = new SamplePage(getDriverContext());
+        loginPg = new SampleLoginPage(getDriverContext());
+        samplePg = new SamplePage(getDriverContext());
 
-        page.login(userName, password);
+        loginPg.login(userName, password);
 
-        page.addItemToCart("Sauce Labs Backpack");
+        samplePg.addItemToCart("Sauce Labs Backpack");
 
-        page.addItemToCart("Sauce Labs Bike Light");
+        samplePg.addItemToCart("Sauce Labs Bike Light");
 
-        page.viewCartAndVerifyItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
+        samplePg.viewCartAndVerifyItems("Sauce Labs Backpack", "Sauce Labs Bike Light");
+    }
 
-        page.removeItemFromCart("Sauce Labs Backpack");
+    @Test(
+            groups = {"Sanity"},
+            description = "Remove item and checkout"
+    )
+    public void removeItemAndCheckout() {
+        samplePg.removeItemFromCart("Sauce Labs Backpack");
 
-        page.checkoutCart();
-
+        samplePg.checkoutCart();
     }
 
 }
