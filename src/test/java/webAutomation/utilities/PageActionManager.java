@@ -62,8 +62,8 @@ public class PageActionManager implements
 
 
 
-//    // ================== Validation Functions ==================
-//
+    // ================== Validation Functions ==================
+
     public void waitForElementToBeVisible(WebElement element) {
         validationInterface.waitForElementToBeVisible(element);
     }
