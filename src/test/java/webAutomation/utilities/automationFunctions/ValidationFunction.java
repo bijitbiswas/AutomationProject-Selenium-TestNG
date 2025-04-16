@@ -16,15 +16,13 @@ import webAutomation.utilities.automationInterfaces.ValidationInterface;
 import java.time.Duration;
 import java.util.function.Consumer;
 
-public class ValidationFunction implements ValidationInterface {
+public class ValidationFunction extends GeneralFunction implements ValidationInterface {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidationFunction.class);
 
     WebDriver webDriver;
     WebDriverWait wait;
-    WebDriverWait waitInValidation;
     FluentWait<WebDriver> fluentWait;
-    GeneralFunction generalFunction = new GeneralFunction();
 
     public ValidationFunction(ContextManager context) {
         this.webDriver = context.webDriver;
@@ -33,24 +31,24 @@ public class ValidationFunction implements ValidationInterface {
     }
 
     private void waitForElementVisibleWithWait(WebElement element, WebDriverWait customWait) {
-        String elementName = generalFunction.getElementName(element);
+        String elementName = getElementName(element);
         try {
             customWait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
-            System.out.println("=======Element " + elementName + " visible on screen=======");
+            println("Element " + elementName + " visible on screen");
         } catch (Exception e) {
-            System.out.println("=======Failed waiting for element " + elementName + " to be visible======");
+            println("Failed waiting for element " + elementName + " to be visible======");
             logger.error("Failed waiting for element", e);
             throw e;
         }
     }
 
     private void waitForElementInvisibleWithWait(WebElement element, WebDriverWait customWait) {
-        String elementName = generalFunction.getElementName(element);
+        String elementName = getElementName(element);
         try {
             customWait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(element)));
-            System.out.println("=======Element " + elementName + " invisible on screen=======");
+            println("Element " + elementName + " invisible on screen");
         } catch (Exception e) {
-            System.out.println("=======Failed waiting for element " + elementName + " to be invisible======");
+            println("Failed waiting for element " + elementName + " to be invisible======");
             logger.error("Failed waiting for element", e);
             throw e;
         }
@@ -116,7 +114,7 @@ public class ValidationFunction implements ValidationInterface {
 
     @Override
     public void validateElementText(WebElement element, String expectedText) {
-        System.out.println("=======Validating element text to be "+expectedText+"=======");
+        println("Validating element text to be "+expectedText);
         String elementText;
         WebElement actionElement;
         try {
@@ -124,21 +122,21 @@ public class ValidationFunction implements ValidationInterface {
                     .visibilityOf(element)));
             elementText = actionElement.getText().isEmpty()?"": actionElement.getText();
         } catch (Exception e){
-            System.out.println("=======Failed to find element to click======");
+            println("Failed to find element to click======");
             e.printStackTrace();
             throw e;
         }
         Assert.assertEquals(elementText, expectedText, "Element text "+expectedText+"is not displayed on element");
-        System.out.println("=======Element text "+expectedText+" is displayed on element=======");
+        println("Element text "+expectedText+" is displayed on element");
     }
 
     @Override
     public void validateText(String expectedText) {
-        System.out.println("=======Validating element text to be "+expectedText+" on screen=======");
+        println("Validating element text to be "+expectedText+" on screen");
         String xpathExpression = "//*[contains(text(),'" + expectedText + "')]";
         Assert.assertTrue(isElementVisibleByXpath(xpathExpression), "Element text " +
                 expectedText+" is not displayed on screen");
-        System.out.println("=======Element text "+expectedText+" is displayed on screen=======");
+        println("Element text "+expectedText+" is displayed on screen");
     }
 
     private boolean conditionCheck(Consumer<WebDriverWait> func, String checkType) {
@@ -149,7 +147,7 @@ public class ValidationFunction implements ValidationInterface {
             checkFlag = true;
         } catch (Exception ignored) {
         }
-        System.out.println("=======Element "+checkType+" is : "+checkFlag+"=======");
+        println("Element "+checkType+" is : "+checkFlag);
         return checkFlag;
     }
 

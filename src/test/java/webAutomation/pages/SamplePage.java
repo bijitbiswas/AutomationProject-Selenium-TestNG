@@ -1,6 +1,5 @@
 package webAutomation.pages;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import webAutomation.utilities.ContextManager;
@@ -62,5 +61,11 @@ public class SamplePage extends PageActionManager {
         clickById("continue");
         clickById("finish");
         validateElementText(completeHeader, "Thank you for your order!");
+
+        sleep(3);
+        navigateBack();
+        String currentURL = getCurrentURL();
+        String browser = getBrowserName();
+        println("Current URL: " + currentURL+" and browser: "+browser);
     }
 }

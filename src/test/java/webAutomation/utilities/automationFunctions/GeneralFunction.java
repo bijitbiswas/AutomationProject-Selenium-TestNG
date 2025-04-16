@@ -24,4 +24,8 @@ public class GeneralFunction {
         return elementName;
     }
 
+    public void println(String message) {
+        System.out.println("========"+message+"========");
+    }
+
 }

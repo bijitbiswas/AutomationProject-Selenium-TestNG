@@ -1,8 +1,9 @@
 package webAutomation.utilities.automationFunctions;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
-import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,15 +12,13 @@ import org.slf4j.LoggerFactory;
 import webAutomation.utilities.ContextManager;
 import webAutomation.utilities.automationInterfaces.InteractionInterface;
 
-public class InteractionFunction implements InteractionInterface {
+public class InteractionFunction extends GeneralFunction implements InteractionInterface  {
 
     private static final Logger logger = LoggerFactory.getLogger(InteractionFunction.class);
 
     WebDriver webDriver;
     WebDriverWait wait;
     FluentWait<WebDriver> fluentWait;
-
-    GeneralFunction generalFunction = new GeneralFunction();
 
     public InteractionFunction(ContextManager context) {
         this.webDriver = context.webDriver;
@@ -30,18 +29,18 @@ public class InteractionFunction implements InteractionInterface {
 
     @Override
     public void click(WebElement element) {
-        String elementName = generalFunction.getElementName(element);
+        String elementName = getElementName(element);
         WebElement actionElement;
         try {
             actionElement = fluentWait.until(ExpectedConditions.refreshed(ExpectedConditions
                     .visibilityOf(element)));
         } catch (Exception e){
-            System.out.println("=======Failed to find element "+elementName+" to click======");
+            println("Failed to find element "+elementName+" to click======");
             logger.error("Failed to find element to click", e);
             throw e;
         }
         actionElement.click();
-        System.out.println("=======Element "+elementName+" clicked=======");
+        println("Element "+elementName+" clicked");
     }
 
     @Override
@@ -55,7 +54,7 @@ public class InteractionFunction implements InteractionInterface {
             throw e;
         }
         actionElement.click();
-        System.out.println("=======Element id : "+elementId+" clicked=======");
+        println("Element id : "+elementId+" clicked");
     }
 
     @Override
@@ -69,7 +68,7 @@ public class InteractionFunction implements InteractionInterface {
             throw e;
         }
         actionElement.click();
-        System.out.println("=======Element xpath : "+elementXpath+" clicked=======");
+        println("Element xpath : "+elementXpath+" clicked");
     }
 
     @Override
@@ -83,12 +82,12 @@ public class InteractionFunction implements InteractionInterface {
             throw e;
         }
         actionElement.click();
-        System.out.println("=======Element text : "+elementText+" clicked=======");
+        println("Element text : "+elementText+" clicked");
     }
 
     @Override
     public void type(WebElement element, String text) {
-        String elementName = generalFunction.getElementName(element);
+        String elementName = getElementName(element);
         WebElement actionElement;
         try {
             actionElement = fluentWait.until(ExpectedConditions.refreshed(ExpectedConditions
@@ -99,7 +98,7 @@ public class InteractionFunction implements InteractionInterface {
         }
         actionElement.clear();
         actionElement.sendKeys(text);
-        System.out.println("=======Text "+text+" typed on element " +elementName+ "=======");
+        println("Text "+text+" typed on element " +elementName);
     }
 
     @Override
@@ -114,7 +113,7 @@ public class InteractionFunction implements InteractionInterface {
         }
         actionElement.clear();
         actionElement.sendKeys(text);
-        System.out.println("=======Text "+text+" typed on element " +elementId+ " by id=======");
+        println("Text "+text+" typed on element " +elementId+ " by id");
     }
 
     

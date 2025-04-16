@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class ContextManager {
 
     public WebDriver webDriver;
-    public String driverName;
+    public String browserName;
     public WebDriverWait wait;
     public FluentWait<WebDriver> fluentWait;
     public ExtentTest extentTest;

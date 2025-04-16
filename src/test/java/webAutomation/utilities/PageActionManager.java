@@ -6,20 +6,23 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import webAutomation.utilities.automationFunctions.InteractionFunction;
 import webAutomation.utilities.automationFunctions.ReportingFunction;
 import webAutomation.utilities.automationFunctions.ValidationFunction;
+import webAutomation.utilities.automationFunctions.WebGeneralFunction;
 import webAutomation.utilities.automationInterfaces.InteractionInterface;
 import webAutomation.utilities.automationInterfaces.ReportingInterface;
 import webAutomation.utilities.automationInterfaces.ValidationInterface;
+import webAutomation.utilities.automationInterfaces.WebGeneralInterface;
 
 // PageActionsManager is the main controller to send the context(driver, wait etc.) to the actual implementation
 public class PageActionManager implements
         InteractionInterface,
-        ValidationInterface
+        ValidationInterface,
+        WebGeneralInterface,
+        ReportingInterface
 {
 
     private final InteractionInterface interactionInterface;
     private final ValidationInterface validationInterface;
-//    private final MobileGeneralInterface mobileGeneralInterface;
-//    private final ImageInterface imageInterface;
+    private final WebGeneralInterface webGeneralInterface;
     private final ReportingInterface reportingInterface;
 
     public PageActionManager(ContextManager context) {
@@ -29,8 +32,7 @@ public class PageActionManager implements
         // Below Interfaces will Delegate to the Implementation function
         this.interactionInterface = new InteractionFunction(context);
         this.validationInterface = new ValidationFunction(context);
-//        this.mobileGeneralInterface = new MobileGeneralFunction(context);
-//        this.imageInterface = new ImageFunction(context);
+        this.webGeneralInterface = new WebGeneralFunction(context);
         this.reportingInterface = new ReportingFunction(context);
     }
 
@@ -115,82 +117,27 @@ public class PageActionManager implements
         validationInterface.validateText(expectedText);
     }
 
-//    // ================== Mobile General Functions ==================
-//    public void navigateBack() {
-//        mobileGeneralInterface.navigateBack();
-//    }
-//
-//    public String getDeviceName() {
-//        return mobileGeneralInterface.getDeviceName();
-//    }
-//
-//    public String getPlatformName() {
-//        return mobileGeneralInterface.getPlatformName();
-//    }
-//
-//    public boolean isPlatform(String platformName) {
-//        return mobileGeneralInterface.isPlatform(platformName);
-//    }
-//
-//    public void sleep(int timeInSecs) {
-//        mobileGeneralInterface.sleep(timeInSecs);
-//    }
-//
-//    public void tapOnScreen(int xCoordinate, int yCoordinate) {
-//        mobileGeneralInterface.tapOnScreen(xCoordinate, yCoordinate);
-//    }
-//
-//
-//    // ================== Image Functions ==================
-//    public void validateScreenVisible(String screenName, Double matchThreshold) {
-//        imageInterface.validateScreenVisible(screenName, matchThreshold);
-//    }
-//
-//    public void validateScreenVisible(String screenName) {
-//        imageInterface.validateScreenVisible(screenName, MATCH_THRESHOLD);
-//    }
-//
-//    public void validateScreenNotVisible(String screenName, Double matchThreshold) {
-//        imageInterface.validateScreenNotVisible(screenName, matchThreshold);
-//    }
-//
-//    public void validateScreenNotVisible(String screenName) {
-//        imageInterface.validateScreenNotVisible(screenName, MATCH_THRESHOLD);
-//    }
-//
-//    public void validateImageVisible(String imageName, Double matchThreshold) {
-//        imageInterface.validateImageVisible(imageName, matchThreshold);
-//    }
-//
-//    public void validateImageVisible(String imageName) {
-//        imageInterface.validateImageVisible(imageName, MATCH_THRESHOLD);
-//    }
-//
-//    public void validateImageNotVisible(String imageName, Double matchThreshold) {
-//        imageInterface.validateImageNotVisible(imageName, matchThreshold);
-//    }
-//
-//    public void validateImageNotVisible(String imageName) {
-//        imageInterface.validateImageNotVisible(imageName, MATCH_THRESHOLD);
-//    }
-//
-//    public Region getVisualImageRegion(String imageName, Double matchThreshold , int scalingFactor ) {
-//        return imageInterface.getVisualImageRegion(imageName, matchThreshold, scalingFactor);
-//    }
-//
-//    public Region getVisualImageRegion(String imageName ) {
-//        return imageInterface.getVisualImageRegion(imageName, MATCH_THRESHOLD, SCALING_FACTOR);
-//    }
-//
-//    public void clickImage(String imageName, Double matchThreshold, int scalingFactor) {
-//        imageInterface.clickImage(imageName, matchThreshold, scalingFactor);
-//    }
-//
-//    public void clickImage(String imageName) {
-//        imageInterface.clickImage(imageName, MATCH_THRESHOLD, SCALING_FACTOR);
-//    }
-//
-//
+    // ================== Mobile General Functions ==================
+    public void navigateBack() {
+        webGeneralInterface.navigateBack();
+    }
+
+    public String getBrowserName() {
+        return webGeneralInterface.getBrowserName();
+    }
+
+    public String getCurrentURL() {
+        return webGeneralInterface.getCurrentURL();
+    }
+
+    public void sleep(int timeInSecs) {
+        webGeneralInterface.sleep(timeInSecs);
+    }
+
+    public void println(String message) {
+        webGeneralInterface.println(message);
+    }
+
     // ================== Reporting Functions ==================
     public void addSuccessLabelWithScreenshot(String labelName) {
         reportingInterface.addSuccessLabelWithScreenshot(labelName);

@@ -15,12 +15,13 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import webAutomation.Constants;
+import webAutomation.utilities.automationFunctions.GeneralFunction;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ReportingManager {
+public class ReportingManager extends GeneralFunction {
 
     private static final String time = new SimpleDateFormat(Constants.EXTENT_REPORT_DATE_TIME_FORMAT)
             .format(new Date());
@@ -34,7 +35,7 @@ public class ReportingManager {
         String suiteName = context.getCurrentXmlTest().getSuite().getName();
         String reportPath = System.getProperty("user.dir") + "/" + reportFolderLocation + "/" +
                 suiteName + "_" + time + ".html";
-        System.out.println("=======Report will be generated at "+reportPath+"======");
+        println("Report will be generated at "+reportPath);
 
         ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
         sparkReporter.config().setDocumentTitle(suiteName + " " + Constants.EXTENT_REPORT_DOCUMENT_TITLE);
@@ -84,7 +85,7 @@ public class ReportingManager {
             File scrFile = ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(scrFile, new File(reportFolderLocation + "/"+ filename));
         } catch (Exception e) {
-            System.out.println("Error copying screenshot to TestReport : " + e.getMessage());
+            println("Error copying screenshot to TestReport : " + e.getMessage());
             throw new RuntimeException(e);
         }
         return filename;

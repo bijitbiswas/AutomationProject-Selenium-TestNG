@@ -10,7 +10,7 @@ import webAutomation.utilities.ContextManager;
 import webAutomation.utilities.ReportingManager;
 import webAutomation.utilities.automationInterfaces.ReportingInterface;
 
-public class ReportingFunction implements ReportingInterface {
+public class ReportingFunction extends GeneralFunction implements ReportingInterface {
 
     WebDriver webDriver;
     ExtentTest extentTest;

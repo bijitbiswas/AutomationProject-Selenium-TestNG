@@ -18,11 +18,12 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import webAutomation.Constants;
+import webAutomation.utilities.automationFunctions.GeneralFunction;
 
 import java.lang.reflect.Method;
 import java.time.Duration;
 
-public class DriverManager {
+public class DriverManager extends GeneralFunction {
 
     private final ContextManager context = new ContextManager();
     private final ReportingManager report = new ReportingManager();
@@ -30,7 +31,7 @@ public class DriverManager {
 
     @BeforeSuite
     public void setupSuite(ITestContext context) {
-        System.out.println("=======Executing before suite======");
+        println("Executing before suite");
         configurationManager = new ConfigurationManager();
 
         report.setupExtentReport(context, configurationManager);
@@ -49,12 +50,12 @@ public class DriverManager {
         context.webDriver = webDriver;
         context.wait = wait;
         context.fluentWait = fluentWait;
-        context.driverName = configurationManager.browserName;
+        context.browserName = configurationManager.browserName;
     }
 
     @BeforeMethod
     public void setupBeforeMethod(ITestResult result) {
-        System.out.println("=======Executing before method======");
+        println("Executing before method");
         context.extentTest = report.createTest(result);
     }
 
@@ -65,23 +66,23 @@ public class DriverManager {
 
     @AfterMethod
     public void addResultToRun(ITestResult result) {
-        System.out.println("=======Executing after method======");
+        println("Executing after method");
         report.updateStatusToReport(getDriverContext().webDriver, result);
     }
 
     @AfterClass(alwaysRun = true)
     public void quitDriver() {
-        System.out.println("========Closing Driver========");
+        println("Closing Driver");
         if (getDriverContext().webDriver != null) {
             getDriverContext().webDriver.quit();
-            System.out.println("========Driver closed successfully========");
+            println("Driver closed successfully");
         } else
-            System.out.println("========Driver is not created or is already closed========");
+            println("Driver is not created or is already closed");
     }
 
     @AfterSuite(alwaysRun = true)
     public void tearDownSuite() {
-        System.out.println("=======Executing after suite======");
+        println("Executing after suite");
         report.closeExtentReport();
     }
 
@@ -92,8 +93,7 @@ public class DriverManager {
     }
 
     private WebDriver createWebDriver() {
-        System.out.println("========Creating " + configurationManager.browserName +" Driver========");
-
+        println("Creating " + configurationManager.browserName +" Driver");
 
         WebDriver webDriver = switch (configurationManager.browserName) {
             case "Chrome" -> new ChromeDriver(getChromeOptions());
@@ -103,7 +103,7 @@ public class DriverManager {
             default -> null;
         };
 
-        System.out.println("========Driver created successfully========");
+        println("Driver created successfully");
         return webDriver;
     }
 
