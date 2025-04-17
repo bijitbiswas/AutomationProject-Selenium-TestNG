@@ -5,9 +5,9 @@ import org.openqa.selenium.support.FindBy;
 import webAutomation.utilities.ContextManager;
 import webAutomation.utilities.PageActionManager;
 
-public class SamplePage extends PageActionManager {
+public class SampleWebPage extends PageActionManager {
 
-    public SamplePage(ContextManager context) {
+    public SampleWebPage(ContextManager context) {
         super(context);
     }
 
