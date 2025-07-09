@@ -22,19 +22,15 @@ pipeline {
     }
 
     parameters {
-        activeChoice(
+        choice(
             name: 'BROWSER_NAME',
-            description: '(Required *) Select BROWSER_NAME to run test on',
-            script: [$class: 'GroovyScript',script: [classpath: [],sandbox  : true, script   : '''
-                return ${toJson(listBROWSER_NAMES)}
-            ''']]
+            choices: listBROWSER_NAMES,
+            description: '(Required *) Select BROWSER_NAME to run test on'
         )
-        activeChoice(
+        choice(
             name: 'SUITE',
-            description: '(Required *) Select SUITE containing the tests',
-            script: [$class: 'GroovyScript',script: [classpath: [],sandbox  : true, script   : '''
-                return ${toJson(listSUITE_NAMES)}
-            ''']]
+            choices: listSUITE_NAMES,
+            description: '(Required *) Select SUITE containing the tests'
         )
     }
 
