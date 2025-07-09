@@ -19,6 +19,7 @@ import webAutomation.Constants;
 import webAutomation.utilities.automationFunctions.GeneralFunction;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -41,7 +42,11 @@ public class ReportingManager extends GeneralFunction {
             reportFolderLocation = reportFolderLocation + time;
         }
 
-        String suiteName = context.getCurrentXmlTest().getSuite().getName();
+        // Get only the suite name
+        String suiteName = Paths.get(context.getCurrentXmlTest().getSuite().getFileName())
+                .getFileName()
+                .toString().replace(".xml", "");
+
         String reportPath = System.getProperty("user.dir") + "/" + reportFolderLocation + "/" +
                 suiteName + ".html";
         println("Report will be generated at "+reportPath);
