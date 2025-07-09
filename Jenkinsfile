@@ -1,11 +1,41 @@
 #!groovy
 
+
+def listBROWSER_NAMES = ["Firefox", "Chrome", "Edge", "Safari"]
+def listSUITE_NAMES = ["SampleSuite"]
+
+def writeConfigFile(browserName, workspace) {
+    echo "DEBUG: Creating config file"
+    def data = """BrowserName=${browserName}
+    ApplicationURL=https://www.saucedemo.com/
+    IsJenkinsRun=true
+    WaitTime=10"""
+    writeFile(file: "${workspace}/config/config.properties", text: data)
+    echo "DEBUG: Config file is created"
+}
+
 pipeline {
     agent any
 
     environment {
         REPORT_DIR = 'TestReport/Report_Folder'
-        REPORT_FILE = 'ExtentSuite_Folder.html'
+    }
+
+    parameters {
+        activeChoice(
+            name: 'BROWSER_NAME',
+            description: '(Required *) Select BROWSER_NAME to run test on',
+            script: [$class: 'GroovyScript',script: [classpath: [],sandbox  : true, script   : '''
+                return ${toJson(listBROWSER_NAMES)}
+            ''']]
+        )
+        activeChoice(
+            name: 'SUITE',
+            description: '(Required *) Select SUITE containing the tests',
+            script: [$class: 'GroovyScript',script: [classpath: [],sandbox  : true, script   : '''
+                return ${toJson(listSUITE_NAMES)}
+            ''']]
+        )
     }
 
     stages {
@@ -15,9 +45,17 @@ pipeline {
             }
         }
 
+        stage('Generate configuration file') {
+            steps{
+                script{
+                    writeConfigFile(params.BROWSER_NAME, env.WORKSPACE)
+                }
+            }
+        }
+
         stage('Build & Run Tests') {
             steps {
-                sh 'mvn clean test'
+                sh 'mvn clean test -Dsurefire.suiteXmlFiles=WebTestSuites/${SUITE}.xml'
             }
         }
 
@@ -34,7 +72,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${env.REPORT_DIR}",
-                    reportFiles: "${env.REPORT_FILE}",
+                    reportFiles: "${params.SUITE}",
                     reportName: 'Extent HTML Report'
                 ])
             }

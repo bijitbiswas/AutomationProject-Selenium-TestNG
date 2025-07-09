@@ -24,18 +24,26 @@ import java.util.Date;
 
 public class ReportingManager extends GeneralFunction {
 
-    private static final String time = "Folder";
-    //new SimpleDateFormat(Constants.EXTENT_REPORT_DATE_TIME_FORMAT).format(new Date());
-    private final String reportFolderLocation = Constants.EXTENT_REPORT_FOLDER_WITH_PREFIX + time;
+    private static final String time = new SimpleDateFormat(Constants.EXTENT_REPORT_DATE_TIME_FORMAT)
+            .format(new Date());
+    private static String reportFolderLocation = Constants.EXTENT_REPORT_FOLDER_WITH_PREFIX;
     private ExtentReports extent;
     private ExtentTest test;
 
 
     public void setupExtentReport(ITestContext context, ConfigurationManager configuration) {
 
-        String suiteName = "ExtentSuite";//context.getCurrentXmlTest().getSuite().getName();
+        // If executed from Jenkins Report_ folder should not have timestamp as it will be
+        // difficult to generate HTML  Report in Jenkins
+        if(configuration.isJenkinsRun) {
+            reportFolderLocation = reportFolderLocation + "Folder";
+        } else {
+            reportFolderLocation = reportFolderLocation + time;
+        }
+
+        String suiteName = context.getCurrentXmlTest().getSuite().getName();
         String reportPath = System.getProperty("user.dir") + "/" + reportFolderLocation + "/" +
-                suiteName + "_" + time + ".html";
+                suiteName + ".html";
         println("Report will be generated at "+reportPath);
 
         ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);

@@ -17,6 +17,8 @@ public class ConfigurationManager extends GeneralFunction {
     final Long waitTime = getWaitTime();
     final String applicationURL = getApplicationURL();
 
+    final boolean isJenkinsRun = getIsJenkinsRun();
+
 
     /**
      * Below methods are the supporting methods to load the configuration from config.properties file
@@ -47,7 +49,11 @@ public class ConfigurationManager extends GeneralFunction {
 
     private String getApplicationURL() {
         assert properties != null;
-        return properties.getProperty("applicationURL");
+        return properties.getProperty("ApplicationURL");
     }
 
+    private boolean getIsJenkinsRun() {
+        assert properties != null;
+        return Boolean.parseBoolean(properties.getProperty("IsJenkinsRun"));
+    }
 }
