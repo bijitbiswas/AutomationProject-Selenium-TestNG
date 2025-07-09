@@ -62,7 +62,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${env.REPORT_DIR}",
-                    reportFiles: "${params.SUITE}",
+                    reportFiles: "${params.SUITE}.html",
                     reportName: 'Extent HTML Report'
                 ])
             }
