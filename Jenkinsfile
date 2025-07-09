@@ -25,12 +25,12 @@ pipeline {
         choice(
             name: 'BROWSER_NAME',
             choices: listBROWSER_NAMES,
-            description: '(Required *) Select BROWSER_NAME to run test on'
+            description: 'Required * Select BROWSER_NAME to run test on'
         )
         choice(
             name: 'SUITE',
             choices: listSUITE_NAMES,
-            description: '(Required *) Select SUITE containing the tests'
+            description: 'Required * Select SUITE containing the tests'
         )
     }
 
