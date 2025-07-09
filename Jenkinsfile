@@ -57,6 +57,13 @@ pipeline {
 
         stage('Publish Extent HTML Report') {
             steps {
+                script {
+                    def reportPath = "${env.REPORT_DIR}/${params.SUITE}.html"
+                    if (!fileExists(reportPath)) {
+                        error "❌ Report not found at: ${reportPath}"
+                    }
+                }
+
                 publishHTML([
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
