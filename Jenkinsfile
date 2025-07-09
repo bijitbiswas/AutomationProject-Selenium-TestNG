@@ -55,12 +55,6 @@ pipeline {
             }
         }
 
-//         stage('Publish TestNG Results') {
-//             steps {
-//                 junit 'test-output/testng-results.xml'
-//             }
-//         }
-
         stage('Publish Extent HTML Report') {
             steps {
                 publishHTML([
