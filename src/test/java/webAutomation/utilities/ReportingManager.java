@@ -23,8 +23,8 @@ import java.util.Date;
 
 public class ReportingManager extends GeneralFunction {
 
-    private static final String time = new SimpleDateFormat(Constants.EXTENT_REPORT_DATE_TIME_FORMAT)
-            .format(new Date());
+    private static final String time = "Folder";
+    //new SimpleDateFormat(Constants.EXTENT_REPORT_DATE_TIME_FORMAT).format(new Date());
     private final String reportFolderLocation = Constants.EXTENT_REPORT_FOLDER_WITH_PREFIX + time;
     private ExtentReports extent;
     private ExtentTest test;
@@ -32,7 +32,7 @@ public class ReportingManager extends GeneralFunction {
 
     public void setupExtentReport(ITestContext context, ConfigurationManager configuration) {
 
-        String suiteName = context.getCurrentXmlTest().getSuite().getName();
+        String suiteName = "ExtentSuite";//context.getCurrentXmlTest().getSuite().getName();
         String reportPath = System.getProperty("user.dir") + "/" + reportFolderLocation + "/" +
                 suiteName + "_" + time + ".html";
         println("Report will be generated at "+reportPath);
