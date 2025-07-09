@@ -58,7 +58,7 @@ pipeline {
         stage('Publish Extent HTML Report') {
             steps {
                 script {
-                    def reportPath = "${env.REPORT_DIR}/${params.SUITE}.html"
+                    def reportPath = "${env.REPORT_DIR}/x${params.SUITE}.html"
                     if (!fileExists(reportPath)) {
                         error "❌ Report not found at: ${reportPath}"
                     }
@@ -78,16 +78,16 @@ pipeline {
 
     post {
         always {
-            echo 'Cleaning up workspace...'
+            echo 'DEBUG: Cleaning up workspace...'
             cleanWs()
         }
 
         success {
-            echo '✅ Build and test execution completed successfully!'
+            echo 'DEBUG: ✅ Build and test execution completed successfully!'
         }
 
         failure {
-            echo '❌ Build or tests failed. Check console output and reports.'
+            echo 'DEBUG: ❌ Build or tests failed. Check console output and reports.'
         }
     }
 }
