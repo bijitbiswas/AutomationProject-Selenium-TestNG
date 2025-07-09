@@ -58,7 +58,7 @@ pipeline {
         stage('Publish Extent HTML Report') {
             steps {
                 script {
-                    def reportPath = "${env.REPORT_DIR}/x${params.SUITE}.html"
+                    def reportPath = "${env.REPORT_DIR}/${params.SUITE}.html"
                     if (!fileExists(reportPath)) {
                         error "❌ Report not found at: ${reportPath}"
                     }
