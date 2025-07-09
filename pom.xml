@@ -16,7 +16,7 @@
 
     <build>
         <testSourceDirectory>src/test/java</testSourceDirectory>
-        <finalName>Automation Project-Selenium-TestNG</finalName>
+        <finalName>Automation Selenium-TestNG</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
