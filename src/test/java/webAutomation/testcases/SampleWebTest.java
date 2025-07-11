@@ -35,6 +35,8 @@ public class SampleWebTest extends DriverManager {
             description = "Remove item and checkout"
     )
     public void removeItemAndCheckout() {
+        sampleWebPg = new SampleWebPage(getDriverContext());
+
         sampleWebPg.removeItemFromCart("Sauce Labs Backpack");
 
         sampleWebPg.checkoutCart();

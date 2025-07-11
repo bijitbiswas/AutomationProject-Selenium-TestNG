@@ -29,7 +29,6 @@ public class ReportingManager extends GeneralFunction {
             .format(new Date());
     private static String reportFolderLocation = Constants.EXTENT_REPORT_FOLDER_WITH_PREFIX;
     private ExtentReports extent;
-    private ExtentTest test;
 
 
     public void setupExtentReport(ITestContext context, ConfigurationManager configuration) {
@@ -63,13 +62,13 @@ public class ReportingManager extends GeneralFunction {
 
     public ExtentTest createTest(ITestResult result) {
         String methodName = result.getMethod().getMethodName();
-        test = extent.createTest(methodName);
+        ExtentTest test = extent.createTest(methodName);
         test.log(Status.INFO, MarkupHelper.createLabel(methodName + " STARTED ", ExtentColor.BLUE));
         test.assignCategory(result.getMethod().getGroups());
         return test;
     }
 
-    public void updateStatusToReport(ITestResult result, WebDriver webDriver) {
+    public void updateStatusToReport(ITestResult result, ExtentTest test, WebDriver webDriver) {
         String resultName = result.getName();
         String finalImagePath = captureScreenshot(webDriver, "Final Step " + resultName);
         Media screenCaptured = MediaEntityBuilder.createScreenCaptureFromPath(finalImagePath).build();
@@ -103,6 +102,7 @@ public class ReportingManager extends GeneralFunction {
             println("ERROR : Failed to capture screenshot to TestReport [failed to copy/image already exists ]: "
                     + e.getMessage());
         }
+        println("Screenshot captured : " + filename);
         return filename;
     }
 

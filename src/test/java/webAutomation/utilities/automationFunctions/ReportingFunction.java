@@ -23,6 +23,7 @@ public class ReportingFunction extends GeneralFunction implements ReportingInter
     @Override
     public void addSuccessLabel(String labelName) {
         extentTest.log(Status.PASS, MarkupHelper.createLabel(labelName, ExtentColor.GREEN));
+        println("Success label added: " + labelName);
     }
 
     @Override
@@ -31,5 +32,6 @@ public class ReportingFunction extends GeneralFunction implements ReportingInter
         extentTest.log(Status.PASS, MarkupHelper.createLabel(labelName, ExtentColor.GREEN),
                 MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build()
         );
+        println("Success label with screenshot added: " + labelName);
     }
 }

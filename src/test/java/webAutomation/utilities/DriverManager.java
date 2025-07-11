@@ -70,7 +70,7 @@ public class DriverManager extends GeneralFunction {
     public void addResultToRun(ITestResult result) {
         println("Executing after method");
 
-        reportingManager.updateStatusToReport(result, getDriverContext().webDriver);
+        reportingManager.updateStatusToReport(result, contextManager.extentTest, getDriverContext().webDriver);
     }
 
     @AfterClass(alwaysRun = true)

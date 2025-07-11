@@ -33,6 +33,8 @@ public class SampleNewWebTest extends DriverManager {
             description = "Very error on checkout with out items in cart"
     )
     public void verifyCheckoutCartWithNoItems() {
+        sampleWebPg = new SampleWebPage(getDriverContext());
+
         sampleWebPg.checkoutCartWithNoItems();
     }
 
