@@ -10,4 +10,11 @@
         </classes>
     </test>
 
+    <test name="TC_02 Sample web automation test"
+          annotations="JDK" enabled="true" >
+        <classes>
+            <class name="webAutomation.testcases.SampleNewWebTest"/>
+        </classes>
+    </test>
+
 </suite>

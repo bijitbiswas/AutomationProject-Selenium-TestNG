@@ -25,20 +25,21 @@ import java.time.Duration;
 
 public class DriverManager extends GeneralFunction {
 
-    private final ContextManager context = new ContextManager();
-    private final ReportingManager report = new ReportingManager();
-    private ConfigurationManager configurationManager;
+    private  final ContextManager contextManager = new ContextManager();
+    private static final ConfigurationManager configurationManager = new ConfigurationManager();
+    private static final ReportingManager reportingManager = new ReportingManager();
+
 
     @BeforeSuite
     public void setupSuite(ITestContext context) {
         println("Executing before suite");
-        configurationManager = new ConfigurationManager();
 
-        report.setupExtentReport(context, configurationManager);
+        reportingManager.setupExtentReport(context, configurationManager);
     }
 
     @BeforeClass
     public void createDriver() {
+        println("Executing before class");
 
         WebDriver webDriver = createWebDriver();
         FluentWait<WebDriver> fluentWait = createFluentWait(webDriver);
@@ -47,16 +48,17 @@ public class DriverManager extends GeneralFunction {
         webDriver.manage().window().maximize();
         webDriver.get(configurationManager.applicationURL);
 
-        context.webDriver = webDriver;
-        context.wait = wait;
-        context.fluentWait = fluentWait;
-        context.browserName = configurationManager.browserName;
+        contextManager.webDriver = webDriver;
+        contextManager.wait = wait;
+        contextManager.fluentWait = fluentWait;
+        contextManager.browserName = configurationManager.browserName;
     }
 
     @BeforeMethod
     public void setupBeforeMethod(ITestResult result) {
         println("Executing before method");
-        context.extentTest = report.createTest(result);
+
+        contextManager.extentTest = reportingManager.createTest(result);
     }
 
     @DataProvider(name = "getTestData")
@@ -67,7 +69,8 @@ public class DriverManager extends GeneralFunction {
     @AfterMethod
     public void addResultToRun(ITestResult result) {
         println("Executing after method");
-        report.updateStatusToReport(getDriverContext().webDriver, result);
+
+        reportingManager.updateStatusToReport(result, getDriverContext().webDriver);
     }
 
     @AfterClass(alwaysRun = true)
@@ -83,13 +86,14 @@ public class DriverManager extends GeneralFunction {
     @AfterSuite(alwaysRun = true)
     public void tearDownSuite() {
         println("Executing after suite");
-        report.closeExtentReport();
+
+        reportingManager.closeExtentReport();
     }
 
 
 
     public ContextManager getDriverContext() {
-        return context;
+        return contextManager;
     }
 
     private WebDriver createWebDriver() {
@@ -138,22 +142,6 @@ public class DriverManager extends GeneralFunction {
         return options;
     }
 
-//
-//    private DesiredCapabilities getDesiredCapabilities() {
-//        return switch (configurationManager.driverName) {
-//            case "Android" -> getAndroidCapabilities();
-//            case "iOS" -> getIOSCapabilities();
-//            case "Browserstack" -> getBrowserstackCapabilities();
-//            default -> throw new IllegalArgumentException("Invalid driver name");
-//        };
-//    }
-//
-//    private DesiredCapabilities getAndroidCapabilities() {
-//        DesiredCapabilities capabilities = configurationManager.androidCapabilities;
-//        capabilities.setCapability("platformName", "Android");
-//        capabilities.setCapability("automationName", "UiAutomator2");
-//        return capabilities;
-//    }
 
     private FluentWait<WebDriver> createFluentWait(WebDriver webDriver) {
         return new FluentWait<>(webDriver)

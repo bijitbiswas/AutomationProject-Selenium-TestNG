@@ -69,7 +69,7 @@ public class ReportingManager extends GeneralFunction {
         return test;
     }
 
-    public void updateStatusToReport(WebDriver webDriver, ITestResult result) {
+    public void updateStatusToReport(ITestResult result, WebDriver webDriver) {
         String resultName = result.getName();
         String finalImagePath = captureScreenshot(webDriver, "Final Step " + resultName);
         Media screenCaptured = MediaEntityBuilder.createScreenCaptureFromPath(finalImagePath).build();
@@ -100,8 +100,8 @@ public class ReportingManager extends GeneralFunction {
             File scrFile = ((TakesScreenshot)webDriver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(scrFile, new File(reportFolderLocation + "/"+ filename));
         } catch (Exception e) {
-            println("Error copying screenshot to TestReport : " + e.getMessage());
-            throw new RuntimeException(e);
+            println("ERROR : Failed to capture screenshot to TestReport [failed to copy/image already exists ]: "
+                    + e.getMessage());
         }
         return filename;
     }

@@ -16,7 +16,6 @@ public class ConfigurationManager extends GeneralFunction {
     final public String browserName = getBrowserName();
     final Long waitTime = getWaitTime();
     final String applicationURL = getApplicationURL();
-
     final boolean isJenkinsRun = getIsJenkinsRun();
 
 
