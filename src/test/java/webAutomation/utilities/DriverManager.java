@@ -37,17 +37,15 @@ public class DriverManager extends GeneralFunction {
         webDriver.manage().window().maximize();
         webDriver.get(configurationManager.applicationURL);
 
-        contextManager.webDriver = webDriver;
-        contextManager.wait = wait;
-        contextManager.fluentWait = fluentWait;
-        contextManager.browserName = configurationManager.browserName;
+        contextManager.initialize(webDriver, wait, fluentWait, configurationManager.browserName);
     }
 
     public void quitDriver() {
         println("Executing quitDriver");
 
-        if (contextManager.webDriver != null) {
-            contextManager.webDriver.quit();
+        if (contextManager.getWebDriver() != null) {
+            contextManager.getWebDriver().quit();
+            contextManager.clear();
             println("Driver closed successfully");
         } else {
             println("Driver is not created or is already closed");

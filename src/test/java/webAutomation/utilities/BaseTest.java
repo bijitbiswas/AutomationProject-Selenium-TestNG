@@ -33,7 +33,7 @@ public class BaseTest extends GeneralFunction {
         println("Executing @BeforeMethod");
 
         driverManager.resetDriver();
-        driverManager.getDriverContext().extentTest = reportingManager.createTest(result);
+        driverManager.getDriverContext().setExtentTest(reportingManager.createTest(result));
     }
 
     @DataProvider(name = "getTestData")
@@ -45,8 +45,8 @@ public class BaseTest extends GeneralFunction {
     public void addResultToRun(ITestResult result) {
         println("Executing @AfterMethod");
 
-        reportingManager.updateStatusToReport(result, driverManager.getDriverContext().extentTest,
-                driverManager.getDriverContext().webDriver);
+        reportingManager.updateStatusToReport(result, driverManager.getDriverContext().getExtentTest(),
+                driverManager.getDriverContext().getWebDriver());
     }
 
     @AfterClass(alwaysRun = true)

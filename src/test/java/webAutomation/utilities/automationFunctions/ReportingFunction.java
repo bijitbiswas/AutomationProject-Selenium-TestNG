@@ -16,8 +16,8 @@ public class ReportingFunction extends GeneralFunction implements ReportingInter
     ExtentTest extentTest;
 
     public ReportingFunction(ContextManager context) {
-        this.webDriver = context.webDriver;
-        this.extentTest = context.extentTest;
+        this.webDriver = context.getWebDriver();
+        this.extentTest = context.getExtentTest();
     }
 
     @Override

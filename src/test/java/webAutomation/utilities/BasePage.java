@@ -27,7 +27,7 @@ public class BasePage implements
 
     public BasePage(ContextManager context) {
         // To initialize the page elements in a generic way
-        PageFactory.initElements(new DefaultElementLocatorFactory(context.webDriver), this);
+        PageFactory.initElements(new DefaultElementLocatorFactory(context.getWebDriver()), this);
 
         // Below Interfaces will Delegate to the Implementation function
         this.interactionInterface = new InteractionFunction(context);

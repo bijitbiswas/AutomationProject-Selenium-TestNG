@@ -25,9 +25,9 @@ public class ValidationFunction extends GeneralFunction implements ValidationInt
     FluentWait<WebDriver> fluentWait;
 
     public ValidationFunction(ContextManager context) {
-        this.webDriver = context.webDriver;
-        this.wait = context.wait;
-        this.fluentWait = context.fluentWait;
+        this.webDriver = context.getWebDriver();
+        this.wait = context.getWait();
+        this.fluentWait = context.getFluentWait();
     }
 
     private void waitForElementVisibleWithWait(WebElement element, WebDriverWait customWait) {

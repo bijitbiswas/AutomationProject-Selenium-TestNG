@@ -18,7 +18,7 @@ public class SampleWebBasePage extends BasePage {
     private final WebDriver driver;
     public SampleWebBasePage(ContextManager context) {
         super(context);
-        driver = context.webDriver;
+        driver = context.getWebDriver();
     }
 
     @FindBy(id = "add-to-cart")

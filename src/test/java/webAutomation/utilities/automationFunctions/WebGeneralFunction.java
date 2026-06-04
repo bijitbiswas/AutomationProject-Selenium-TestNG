@@ -17,10 +17,10 @@ public class WebGeneralFunction extends GeneralFunction implements WebGeneralInt
     GeneralFunction generalFunction = new GeneralFunction();
 
     public WebGeneralFunction(ContextManager context) {
-        this.webDriver = context.webDriver;
-        this.wait = context.wait;
-        this.fluentWait = context.fluentWait;
-        this.browserName = context.browserName;
+        this.webDriver = context.getWebDriver();
+        this.wait = context.getWait();
+        this.fluentWait = context.getFluentWait();
+        this.browserName = context.getBrowserName();
     }
 
 

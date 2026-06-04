@@ -21,9 +21,9 @@ public class InteractionFunction extends GeneralFunction implements InteractionI
     FluentWait<WebDriver> fluentWait;
 
     public InteractionFunction(ContextManager context) {
-        this.webDriver = context.webDriver;
-        this.wait = context.wait;
-        this.fluentWait = context.fluentWait;
+        this.webDriver = context.getWebDriver();
+        this.wait = context.getWait();
+        this.fluentWait = context.getFluentWait();
     }
 
 
