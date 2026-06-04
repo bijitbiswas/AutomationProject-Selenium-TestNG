@@ -15,7 +15,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import webAutomation.utilities.automationFunctions.GeneralFunction;
+import webAutomation.actionUtilities.automationFunctions.GeneralFunction;
 
 import java.io.File;
 import java.nio.file.Paths;

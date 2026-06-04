@@ -1,4 +1,4 @@
-package webAutomation.utilities.automationFunctions;
+package webAutomation.actionUtilities.automationFunctions;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import webAutomation.utilities.Constants;
 import webAutomation.utilities.ContextManager;
-import webAutomation.utilities.automationInterfaces.ValidationInterface;
+import webAutomation.actionUtilities.automationInterfaces.ValidationInterface;
 
 import java.time.Duration;
 import java.util.function.Consumer;

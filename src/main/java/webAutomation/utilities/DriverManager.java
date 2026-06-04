@@ -14,7 +14,7 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import webAutomation.utilities.automationFunctions.GeneralFunction;
+import webAutomation.actionUtilities.automationFunctions.GeneralFunction;
 
 import java.time.Duration;
 

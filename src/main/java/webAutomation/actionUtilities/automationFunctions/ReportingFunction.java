@@ -1,4 +1,4 @@
-package webAutomation.utilities.automationFunctions;
+package webAutomation.actionUtilities.automationFunctions;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
@@ -8,7 +8,7 @@ import com.aventstack.extentreports.markuputils.MarkupHelper;
 import org.openqa.selenium.WebDriver;
 import webAutomation.utilities.ContextManager;
 import webAutomation.utilities.ReportingManager;
-import webAutomation.utilities.automationInterfaces.ReportingInterface;
+import webAutomation.actionUtilities.automationInterfaces.ReportingInterface;
 
 public class ReportingFunction extends GeneralFunction implements ReportingInterface {
 

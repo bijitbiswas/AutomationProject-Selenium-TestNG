@@ -1,6 +1,6 @@
 package webAutomation.utilities;
 
-import webAutomation.utilities.automationFunctions.GeneralFunction;
+import webAutomation.actionUtilities.automationFunctions.GeneralFunction;
 
 import java.io.File;
 import java.io.FileInputStream;

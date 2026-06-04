@@ -4,7 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import webAutomation.pages.SampleLoginBasePage;
 import webAutomation.pages.SampleWebBasePage;
-import webAutomation.utilities.BaseTest;
+import webAutomation.BaseTest;
 
 public class SampleRetryWebTest extends BaseTest {
 
@@ -22,7 +22,6 @@ public class SampleRetryWebTest extends BaseTest {
         sampleLoginPg = new SampleLoginBasePage(getDriverContext());
         sampleWebPg = new SampleWebBasePage(getDriverContext());
 
-        println("Inside @Test verifyItemSorting");
         sampleLoginPg.login(userName, userPassword);
         // Intentionally failing test to demonstrate retry mechanism
         Assert.fail();

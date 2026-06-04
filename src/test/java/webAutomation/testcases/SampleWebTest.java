@@ -3,7 +3,7 @@ package webAutomation.testcases;
 import org.testng.annotations.Test;
 import webAutomation.pages.SampleLoginBasePage;
 import webAutomation.pages.SampleWebBasePage;
-import webAutomation.utilities.BaseTest;
+import webAutomation.BaseTest;
 
 
 public class SampleWebTest extends BaseTest {

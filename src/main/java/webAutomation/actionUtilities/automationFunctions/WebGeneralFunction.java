@@ -1,11 +1,11 @@
-package webAutomation.utilities.automationFunctions;
+package webAutomation.actionUtilities.automationFunctions;
 
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import webAutomation.utilities.ContextManager;
-import webAutomation.utilities.automationInterfaces.WebGeneralInterface;
+import webAutomation.actionUtilities.automationInterfaces.WebGeneralInterface;
 
 
 public class WebGeneralFunction extends GeneralFunction implements WebGeneralInterface {

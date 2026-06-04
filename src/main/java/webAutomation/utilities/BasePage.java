@@ -3,14 +3,14 @@ package webAutomation.utilities;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
-import webAutomation.utilities.automationFunctions.InteractionFunction;
-import webAutomation.utilities.automationFunctions.ReportingFunction;
-import webAutomation.utilities.automationFunctions.ValidationFunction;
-import webAutomation.utilities.automationFunctions.WebGeneralFunction;
-import webAutomation.utilities.automationInterfaces.InteractionInterface;
-import webAutomation.utilities.automationInterfaces.ReportingInterface;
-import webAutomation.utilities.automationInterfaces.ValidationInterface;
-import webAutomation.utilities.automationInterfaces.WebGeneralInterface;
+import webAutomation.actionUtilities.automationFunctions.InteractionFunction;
+import webAutomation.actionUtilities.automationFunctions.ReportingFunction;
+import webAutomation.actionUtilities.automationFunctions.ValidationFunction;
+import webAutomation.actionUtilities.automationFunctions.WebGeneralFunction;
+import webAutomation.actionUtilities.automationInterfaces.InteractionInterface;
+import webAutomation.actionUtilities.automationInterfaces.ReportingInterface;
+import webAutomation.actionUtilities.automationInterfaces.ValidationInterface;
+import webAutomation.actionUtilities.automationInterfaces.WebGeneralInterface;
 
 // BasePage is the main controller to send the context(driver, wait etc.) to the actual implementation
 public class BasePage implements

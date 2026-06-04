@@ -1,4 +1,4 @@
-package webAutomation.utilities.automationInterfaces;
+package webAutomation.actionUtilities.automationInterfaces;
 
 public interface ReportingInterface {
 

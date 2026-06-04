@@ -1,4 +1,4 @@
-package webAutomation.utilities.automationFunctions;
+package webAutomation.actionUtilities.automationFunctions;
 
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;

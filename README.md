@@ -43,46 +43,51 @@ AutomationProject-Selenium-TestNG/
 │   ├── SampleSuite.xml              # Parallel suite: SampleWebTest + SampleNewWebTest
 │   └── SampleRetrySuite.xml         # Retry suite: SampleRetryWebTest
 │
-├── src/test/java/webAutomation/
+├── src/
 │   │
-│   ├── pages/                       # Page Object classes
-│   │   ├── SampleLoginBasePage.java
-│   │   └── SampleWebBasePage.java
+│   ├── main/java/webAutomation/
+│   │   └── utilities/
+│   │       ├── BaseManager.java         # Core lifecycle logic: beforeSuite, beforeClass, beforeMethod, testData
+│   │       ├── BasePage.java            # Delegates all page actions to function classes
+│   │       ├── ContextManager.java      # Holds WebDriver, waits, and ExtentTest per thread
+│   │       ├── DriverManager.java       # Browser creation, quit, and retry reset
+│   │       ├── ConfigurationManager.java# Reads config.properties at startup
+│   │       ├── ReportingManager.java    # Extent report setup and step logging
+│   │       ├── ExcelManager.java        # Reads test data from Testdata.xlsx
+│   │       ├── RetryAnalyzer.java       # ThreadLocal retry counter logic
+│   │       ├── RetryListener.java       # Applies RetryAnalyzer to all tests via IAnnotationTransformer
+│   │       ├── Constants.java           # Shared constant values
+│   │       │
+│   │       ├── automationFunctions/     # Concrete implementations of each interface
+│   │       │   ├── InteractionFunction.java
+│   │       │   ├── ValidationFunction.java
+│   │       │   ├── WebGeneralFunction.java
+│   │       │   ├── ReportingFunction.java
+│   │       │   └── GeneralFunction.java
+│   │       │
+│   │       └── automationInterfaces/    # Contracts consumed by BasePage
+│   │           ├── InteractionInterface.java
+│   │           ├── ValidationInterface.java
+│   │           ├── WebGeneralInterface.java
+│   │           └── ReportingInterface.java
 │   │
-│   ├── testcases/                   # Test classes (extend BaseTest)
-│   │   ├── SampleWebTest.java
-│   │   ├── SampleNewWebTest.java
-│   │   └── SampleRetryWebTest.java
-│   │
-│   ├── testData/
-│   │   └── Testdata.xlsx            # Excel test data (sheet per test method)
-│   │
-│   └── utilities/
-│       ├── BaseTest.java            # @Before/@After lifecycle + @DataProvider
-│       ├── BasePage.java            # Delegates all page actions to function classes
-│       ├── ContextManager.java      # Holds WebDriver, waits, and ExtentTest per thread
-│       ├── DriverManager.java       # Browser creation, quit, and retry reset
-│       ├── ConfigurationManager.java# Reads config.properties at startup
-│       ├── ReportingManager.java    # Extent report setup and step logging
-│       ├── ExcelManager.java        # Reads test data from Testdata.xlsx
-│       ├── RetryAnalyzer.java       # ThreadLocal retry counter logic
-│       ├── RetryListener.java       # Applies RetryAnalyzer to all tests via IAnnotationTransformer
-│       ├── Constants.java           # Shared constant values
+│   └── test/java/webAutomation/
 │       │
-│       ├── automationFunctions/     # Concrete implementations of each interface
-│       │   ├── InteractionFunction.java
-│       │   ├── ValidationFunction.java
-│       │   ├── WebGeneralFunction.java
-│       │   ├── ReportingFunction.java
-│       │   └── GeneralFunction.java
+│       ├── BaseTest.java                # TestNG @Before/@After annotations — delegates to BaseManager
 │       │
-│       └── automationInterfaces/    # Contracts consumed by BasePage
-│           ├── InteractionInterface.java
-│           ├── ValidationInterface.java
-│           ├── WebGeneralInterface.java
-│           └── ReportingInterface.java
+│       ├── pages/                       # Page Object classes
+│       │   ├── SampleLoginBasePage.java
+│       │   └── SampleWebBasePage.java
+│       │
+│       ├── testcases/                   # Test classes (extend BaseTest)
+│       │   ├── SampleWebTest.java
+│       │   ├── SampleNewWebTest.java
+│       │   └── SampleRetryWebTest.java
+│       │
+│       └── testData/
+│           └── Testdata.xlsx            # Excel test data (sheet per test method)
 │
-├── Jenkinsfile                      # Parameterised Jenkins pipeline
+├── Jenkinsfile                          # Parameterised Jenkins pipeline
 └── pom.xml
 ```
 
@@ -146,7 +151,52 @@ public class LoginPage extends BasePage {
 }
 ```
 
-**2. Create a test class** extending `BaseTest`:
+**2. Create `BaseTest`** extending `BaseManager` and wiring each TestNG annotation to the corresponding `BaseManager` method:
+
+```java
+// src/test/java/webAutomation/BaseTest.java
+public class BaseTest extends BaseManager {
+
+    @BeforeSuite
+    public void setupBeforeSuite(ITestContext context) {
+        beforeSuite(context);        // sets up Extent Report
+    }
+
+    @BeforeClass
+    public void setupBeforeClass(ITestContext context) {
+        beforeClass(context);        // creates the WebDriver
+    }
+
+    @BeforeMethod
+    public void setupBeforeMethod(ITestResult result) {
+        beforeMethod(result);        // resets driver, creates test node in report
+    }
+
+    @DataProvider(name = "getTestData")
+    public String[][] getTestData(Method method) {
+        return testData(method);     // loads rows from Testdata.xlsx by method name
+    }
+
+    @AfterMethod
+    public void setupAfterMethod(ITestResult result) {
+        afterMethod(result);         // captures screenshot, logs pass/fail
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void setupAfterClass() {
+        afterClass();                // quits the WebDriver
+    }
+
+    @AfterSuite(alwaysRun = true)
+    public void setupAfterSuite() {
+        afterSuite();                // closes the Extent Report
+    }
+}
+```
+
+> `BaseManager` (in `src/main`) owns all the logic. `BaseTest` (in `src/test`) is purely a thin TestNG adapter — it only maps annotations to `BaseManager` calls. This keeps framework infrastructure free of TestNG lifecycle coupling.
+
+**3. Create a test class** extending `BaseTest`:
 
 ```java
 // src/test/java/webAutomation/testcases/LoginTest.java
@@ -165,9 +215,9 @@ public class LoginTest extends BaseTest {
 }
 ```
 
-**3. Add test data** to `Testdata.xlsx` in a sheet named `verifyLogin` with one row per data set.
+**4. Add test data** to `Testdata.xlsx` in a sheet named `verifyLogin` with one row per data set.
 
-**4. Register the class** in a suite XML under `WebTestSuites/`:
+**5. Register the class** in a suite XML under `WebTestSuites/`:
 
 ```xml
 <test name="Login Tests">

@@ -1,4 +1,4 @@
-package webAutomation.utilities.automationFunctions;
+package webAutomation.actionUtilities.automationFunctions;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webAutomation.utilities.ContextManager;
-import webAutomation.utilities.automationInterfaces.InteractionInterface;
+import webAutomation.actionUtilities.automationInterfaces.InteractionInterface;
 
 public class InteractionFunction extends GeneralFunction implements InteractionInterface  {
 
