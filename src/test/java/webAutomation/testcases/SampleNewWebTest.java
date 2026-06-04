@@ -1,15 +1,15 @@
 package webAutomation.testcases;
 
 import org.testng.annotations.Test;
-import webAutomation.pages.SampleLoginPage;
-import webAutomation.pages.SampleWebPage;
-import webAutomation.utilities.DriverManager;
+import webAutomation.pages.SampleLoginBasePage;
+import webAutomation.pages.SampleWebBasePage;
+import webAutomation.utilities.BaseTest;
 
 
-public class SampleNewWebTest extends DriverManager {
+public class SampleNewWebTest extends BaseTest {
 
-    SampleLoginPage sampleLoginPg;
-    SampleWebPage sampleWebPg;
+    SampleLoginBasePage sampleLoginPg;
+    SampleWebBasePage sampleWebPg;
 
     @Test(
             priority = 1,
@@ -19,8 +19,8 @@ public class SampleNewWebTest extends DriverManager {
     )
     public void verifyItemSorting(String userName, String password) {
 
-        sampleLoginPg = new SampleLoginPage(getDriverContext());
-        sampleWebPg = new SampleWebPage(getDriverContext());
+        sampleLoginPg = new SampleLoginBasePage(getDriverContext());
+        sampleWebPg = new SampleWebBasePage(getDriverContext());
 
         sampleLoginPg.login(userName, password);
 
@@ -33,7 +33,7 @@ public class SampleNewWebTest extends DriverManager {
             description = "Very error on checkout with out items in cart"
     )
     public void verifyCheckoutCartWithNoItems() {
-        sampleWebPg = new SampleWebPage(getDriverContext());
+        sampleWebPg = new SampleWebBasePage(getDriverContext());
 
         sampleWebPg.checkoutCartWithNoItems();
     }

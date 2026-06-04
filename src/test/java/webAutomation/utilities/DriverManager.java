@@ -14,33 +14,21 @@ import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.annotations.*;
-import webAutomation.Constants;
 import webAutomation.utilities.automationFunctions.GeneralFunction;
 
-import java.lang.reflect.Method;
 import java.time.Duration;
 
 public class DriverManager extends GeneralFunction {
 
-    private  final ContextManager contextManager = new ContextManager();
-    private static final ConfigurationManager configurationManager = new ConfigurationManager();
-    private static final ReportingManager reportingManager = new ReportingManager();
+    private final ContextManager contextManager = new ContextManager();
+    private final ConfigurationManager configurationManager;
 
-
-
-    @BeforeSuite
-    public void setupSuite(ITestContext context) {
-        println("Executing @BeforeSuite");
-
-        reportingManager.setupExtentReport(context, configurationManager);
+    public DriverManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
     }
 
-    @BeforeClass
     public void createDriver() {
-        println("Executing @BeforeClass");
+        println("Executing createDriver");
 
         WebDriver webDriver = createWebDriver();
         FluentWait<WebDriver> fluentWait = createFluentWait(webDriver);
@@ -55,45 +43,16 @@ public class DriverManager extends GeneralFunction {
         contextManager.browserName = configurationManager.browserName;
     }
 
-    @BeforeMethod
-    public void setupBeforeMethod(ITestResult result) {
-        println("Executing @BeforeMethod");
-
-        resetDriver();
-
-        contextManager.extentTest = reportingManager.createTest(result);
-    }
-
-    @DataProvider(name = "getTestData")
-    public String[][] getTestData(Method method) {
-        return new ExcelManager().getMethodData(method.getName());
-    }
-
-    @AfterMethod
-    public void addResultToRun(ITestResult result) {
-        println("Executing @AfterMethod");
-
-        reportingManager.updateStatusToReport(result, contextManager.extentTest, getDriverContext().webDriver);
-    }
-
-    @AfterClass(alwaysRun = true)
     public void quitDriver() {
-        println("Executing @AfterClass");
+        println("Executing quitDriver");
 
-        if (getDriverContext().webDriver != null) {
-            getDriverContext().webDriver.quit();
+        if (contextManager.webDriver != null) {
+            contextManager.webDriver.quit();
             println("Driver closed successfully");
-        } else
+        } else {
             println("Driver is not created or is already closed");
+        }
     }
-
-    @AfterSuite(alwaysRun = true)
-    public void tearDownSuite() {
-        println("Executing @AfterSuite");
-
-        reportingManager.closeExtentReport();
-    }
-
 
     public void resetDriver() {
         if (RetryAnalyzer.isRetrying()) {
@@ -107,7 +66,7 @@ public class DriverManager extends GeneralFunction {
     }
 
     private WebDriver createWebDriver() {
-        println("Creating " + configurationManager.browserName +" Driver");
+        println("Creating " + configurationManager.browserName + " Driver");
 
         WebDriver webDriver = switch (configurationManager.browserName) {
             case "Chrome" -> new ChromeDriver(getChromeOptions());
@@ -151,7 +110,6 @@ public class DriverManager extends GeneralFunction {
         options.setPageLoadTimeout(Duration.ofSeconds(configurationManager.waitTime));
         return options;
     }
-
 
     private FluentWait<WebDriver> createFluentWait(WebDriver webDriver) {
         return new FluentWait<>(webDriver)

@@ -7,16 +7,16 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import webAutomation.utilities.ContextManager;
-import webAutomation.utilities.PageActionManager;
+import webAutomation.utilities.BasePage;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SampleWebPage extends PageActionManager {
+public class SampleWebBasePage extends BasePage {
 
     private final WebDriver driver;
-    public SampleWebPage(ContextManager context) {
+    public SampleWebBasePage(ContextManager context) {
         super(context);
         driver = context.webDriver;
     }

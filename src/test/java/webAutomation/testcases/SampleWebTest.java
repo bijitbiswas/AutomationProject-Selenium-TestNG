@@ -1,15 +1,15 @@
 package webAutomation.testcases;
 
 import org.testng.annotations.Test;
-import webAutomation.pages.SampleLoginPage;
-import webAutomation.pages.SampleWebPage;
-import webAutomation.utilities.DriverManager;
+import webAutomation.pages.SampleLoginBasePage;
+import webAutomation.pages.SampleWebBasePage;
+import webAutomation.utilities.BaseTest;
 
 
-public class SampleWebTest extends DriverManager {
+public class SampleWebTest extends BaseTest {
 
-    SampleLoginPage sampleLoginPg;
-    SampleWebPage sampleWebPg;
+    SampleLoginBasePage sampleLoginPg;
+    SampleWebBasePage sampleWebPg;
 
     @Test(
             groups = {"Smoke", "Regression"},
@@ -18,8 +18,8 @@ public class SampleWebTest extends DriverManager {
     )
     public void addItemsToCart(String userName, String password) {
 
-        sampleLoginPg = new SampleLoginPage(getDriverContext());
-        sampleWebPg = new SampleWebPage(getDriverContext());
+        sampleLoginPg = new SampleLoginBasePage(getDriverContext());
+        sampleWebPg = new SampleWebBasePage(getDriverContext());
 
         sampleLoginPg.login(userName, password);
 
@@ -36,7 +36,7 @@ public class SampleWebTest extends DriverManager {
             dependsOnMethods = {"addItemsToCart"}
     )
     public void removeItemAndCheckout() {
-        sampleWebPg = new SampleWebPage(getDriverContext());
+        sampleWebPg = new SampleWebBasePage(getDriverContext());
 
         sampleWebPg.removeItemFromCart("Sauce Labs Backpack");
 

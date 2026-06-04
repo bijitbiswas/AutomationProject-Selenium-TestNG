@@ -2,14 +2,14 @@ package webAutomation.testcases;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import webAutomation.pages.SampleLoginPage;
-import webAutomation.pages.SampleWebPage;
-import webAutomation.utilities.DriverManager;
+import webAutomation.pages.SampleLoginBasePage;
+import webAutomation.pages.SampleWebBasePage;
+import webAutomation.utilities.BaseTest;
 
-public class SampleRetryWebTest extends DriverManager {
+public class SampleRetryWebTest extends BaseTest {
 
-    SampleLoginPage sampleLoginPg;
-    SampleWebPage sampleWebPg;
+    SampleLoginBasePage sampleLoginPg;
+    SampleWebBasePage sampleWebPg;
 
     @Test(
             priority = 1,
@@ -19,8 +19,8 @@ public class SampleRetryWebTest extends DriverManager {
     )
     public void verifyItemSorting(String userName, String userPassword) {
 
-        sampleLoginPg = new SampleLoginPage(getDriverContext());
-        sampleWebPg = new SampleWebPage(getDriverContext());
+        sampleLoginPg = new SampleLoginBasePage(getDriverContext());
+        sampleWebPg = new SampleWebBasePage(getDriverContext());
 
         println("Inside @Test verifyItemSorting");
         sampleLoginPg.login(userName, userPassword);

@@ -2,7 +2,7 @@
 
 
 def listBROWSER_NAMES = ["Firefox", "Chrome", "Edge", "Safari"]
-def listSUITE_NAMES = ["SampleSuite"]
+def listSUITE_NAMES = ["SampleSuite", "SampleRetrySuite"]
 
 def writeConfigFile(browserName, workspace) {
     echo "DEBUG: Creating config file"

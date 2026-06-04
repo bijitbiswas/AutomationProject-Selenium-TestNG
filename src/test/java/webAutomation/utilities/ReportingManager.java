@@ -15,7 +15,6 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import webAutomation.Constants;
 import webAutomation.utilities.automationFunctions.GeneralFunction;
 
 import java.io.File;

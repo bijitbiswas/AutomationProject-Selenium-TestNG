@@ -3,11 +3,11 @@ package webAutomation.pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import webAutomation.utilities.ContextManager;
-import webAutomation.utilities.PageActionManager;
+import webAutomation.utilities.BasePage;
 
-public class SampleLoginPage extends PageActionManager {
+public class SampleLoginBasePage extends BasePage {
 
-    public SampleLoginPage(ContextManager context) {
+    public SampleLoginBasePage(ContextManager context) {
         super(context);
     }
 

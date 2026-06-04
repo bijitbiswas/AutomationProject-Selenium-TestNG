@@ -1,4 +1,4 @@
-package webAutomation;
+package webAutomation.utilities;
 
 public final class Constants {
 
