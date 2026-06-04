@@ -2,69 +2,54 @@ package webAutomation.utilities;
 
 import org.testng.ITestContext;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
-import webAutomation.utilities.automationFunctions.GeneralFunction;
 
 import java.lang.reflect.Method;
 
-public class BaseTest extends GeneralFunction {
+public class BaseManager {
 
     private static final ConfigurationManager configurationManager = new ConfigurationManager();
     private static final ReportingManager reportingManager = new ReportingManager();
 
     private final DriverManager driverManager = new DriverManager(configurationManager);
 
-    @BeforeSuite
-    public void setupSuite(ITestContext context) {
-        println("Executing @BeforeSuite");
-
+    public void beforeSuite(ITestContext context) {
+        System.out.println("********@BeforeSuite********");
         reportingManager.setupExtentReport(context, configurationManager);
     }
 
-    @BeforeClass
-    public void createDriver() {
-        println("Executing @BeforeClass");
-
+    public void beforeClass(ITestContext context) {
+        System.out.println("********Started @BeforeClass********");
         driverManager.createDriver();
     }
 
-    @BeforeMethod
-    public void setupBeforeMethod(ITestResult result) {
-        println("Executing @BeforeMethod");
-
+    public void beforeMethod(ITestResult result) {
+        System.out.println("********Started @BeforeMethod********");
         driverManager.resetDriver();
         driverManager.getDriverContext().setExtentTest(reportingManager.createTest(result));
     }
 
-    @DataProvider(name = "getTestData")
-    public String[][] getTestData(Method method) {
+    public String[][] testData(Method method) {
+        System.out.println("********Getting test data for method: " + method.getName() + "********");
         return new ExcelManager().getMethodData(method.getName());
     }
 
-    @AfterMethod
-    public void addResultToRun(ITestResult result) {
-        println("Executing @AfterMethod");
-
+    public void afterMethod(ITestResult result) {
+        System.out.println("********Started @AfterMethod********");
         reportingManager.updateStatusToReport(result, driverManager.getDriverContext().getExtentTest(),
                 driverManager.getDriverContext().getWebDriver());
     }
 
-    @AfterClass(alwaysRun = true)
-    public void quitDriver() {
-        println("Executing @AfterClass");
-
+    public void afterClass() {
+        System.out.println("********Started @AfterClass********");
         driverManager.quitDriver();
     }
 
-    @AfterSuite(alwaysRun = true)
-    public void tearDownSuite() {
-        println("Executing @AfterSuite");
-
+    public void afterSuite() {
+        System.out.println("********Started @AfterSuite********");
         reportingManager.closeExtentReport();
     }
 
     public ContextManager getDriverContext() {
         return driverManager.getDriverContext();
     }
-
 }
