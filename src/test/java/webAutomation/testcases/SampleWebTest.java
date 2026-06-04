@@ -32,7 +32,8 @@ public class SampleWebTest extends DriverManager {
 
     @Test(
             groups = {"Sanity"},
-            description = "Remove item and checkout"
+            description = "Remove item and checkout",
+            dependsOnMethods = {"addItemsToCart"}
     )
     public void removeItemAndCheckout() {
         sampleWebPg = new SampleWebPage(getDriverContext());

@@ -7,17 +7,10 @@
         <listener class-name="webAutomation.utilities.RetryListener"/>
     </listeners>
 
-    <test name="TC_01 Sample web automation test"
+    <test name="TC_01 Sample retry web automation test"
           annotations="JDK" enabled="true" >
         <classes>
-            <class name="webAutomation.testcases.SampleWebTest"/>
-        </classes>
-    </test>
-
-    <test name="TC_02 Sample new web automation test"
-          annotations="JDK" enabled="true" >
-        <classes>
-            <class name="webAutomation.testcases.SampleNewWebTest"/>
+            <class name="webAutomation.testcases.SampleRetryWebTest"/>
         </classes>
     </test>
 

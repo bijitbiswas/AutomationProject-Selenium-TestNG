@@ -30,16 +30,17 @@ public class DriverManager extends GeneralFunction {
     private static final ReportingManager reportingManager = new ReportingManager();
 
 
+
     @BeforeSuite
     public void setupSuite(ITestContext context) {
-        println("Executing before suite");
+        println("Executing @BeforeSuite");
 
         reportingManager.setupExtentReport(context, configurationManager);
     }
 
     @BeforeClass
     public void createDriver() {
-        println("Executing before class");
+        println("Executing @BeforeClass");
 
         WebDriver webDriver = createWebDriver();
         FluentWait<WebDriver> fluentWait = createFluentWait(webDriver);
@@ -56,7 +57,9 @@ public class DriverManager extends GeneralFunction {
 
     @BeforeMethod
     public void setupBeforeMethod(ITestResult result) {
-        println("Executing before method");
+        println("Executing @BeforeMethod");
+
+        resetDriver();
 
         contextManager.extentTest = reportingManager.createTest(result);
     }
@@ -68,14 +71,15 @@ public class DriverManager extends GeneralFunction {
 
     @AfterMethod
     public void addResultToRun(ITestResult result) {
-        println("Executing after method");
+        println("Executing @AfterMethod");
 
         reportingManager.updateStatusToReport(result, contextManager.extentTest, getDriverContext().webDriver);
     }
 
     @AfterClass(alwaysRun = true)
     public void quitDriver() {
-        println("Closing Driver");
+        println("Executing @AfterClass");
+
         if (getDriverContext().webDriver != null) {
             getDriverContext().webDriver.quit();
             println("Driver closed successfully");
@@ -85,12 +89,18 @@ public class DriverManager extends GeneralFunction {
 
     @AfterSuite(alwaysRun = true)
     public void tearDownSuite() {
-        println("Executing after suite");
+        println("Executing @AfterSuite");
 
         reportingManager.closeExtentReport();
     }
 
 
+    public void resetDriver() {
+        if (RetryAnalyzer.isRetrying()) {
+            quitDriver();
+            createDriver();
+        }
+    }
 
     public ContextManager getDriverContext() {
         return contextManager;
