@@ -13,7 +13,6 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.ITestContext;
 import org.testng.ITestResult;
 import webAutomation.actionUtilities.automationFunctions.GeneralFunction;
 
@@ -30,7 +29,7 @@ public class ReportingManager extends GeneralFunction {
     private ExtentReports extent;
 
 
-    public void setupExtentReport(ITestContext context, ConfigurationManager configuration) {
+    public void setupExtentReport(ConfigurationManager configuration) {
 
         // If executed from Jenkins Report_ folder should not have timestamp as it will be
         // difficult to generate HTML  Report in Jenkins
@@ -41,7 +40,7 @@ public class ReportingManager extends GeneralFunction {
         }
 
         // Get only the suite name
-        String suiteName = Paths.get(context.getCurrentXmlTest().getSuite().getFileName())
+        String suiteName = Paths.get("Bijit_WebAutomation")
                 .getFileName()
                 .toString().replace(".xml", "");
 

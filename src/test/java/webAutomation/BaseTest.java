@@ -10,37 +10,37 @@ import java.lang.reflect.Method;
 public class BaseTest extends BaseManager {
 
     @BeforeSuite
-    public void setupBeforeSuite(ITestContext context) {
-        beforeSuite(context);
+    public void onBeforeSuite() {
+        beforeSuite();
     }
 
     @BeforeClass
-    public void setupBeforeClass(ITestContext context) {
+    public void onBeforeClass(ITestContext context) {
         beforeClass(context);
     }
 
     @BeforeMethod
-    public void setupBeforeMethod(ITestResult result) {
+    public void onBeforeMethod(ITestResult result) {
         beforeMethod(result);
     }
 
     @DataProvider(name = "getTestData")
-    public String[][] getTestData(Method method) {
-        return testData(method);
+    public String[][] onDataProvider(Method method) {
+        return dataProvider(method);
     }
 
     @AfterMethod
-    public void setupAfterMethod(ITestResult result) {
+    public void onAfterMethod(ITestResult result) {
         afterMethod(result);
     }
 
     @AfterClass(alwaysRun = true)
-    public void setupAfterClass() {
+    public void onAfterClass() {
         afterClass();
     }
 
     @AfterSuite(alwaysRun = true)
-    public void setupAfterSuite() {
+    public void onAfterSuite() {
         afterSuite();
     }
 }

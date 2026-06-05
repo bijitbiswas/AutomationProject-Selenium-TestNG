@@ -326,6 +326,9 @@ This project is made available for **trial and evaluation purposes only**.
 
 For commercial licensing or extended use, contact the project maintainer via the GitHub repository.
 
+**See [LICENSE](./LICENSE)**
+
 ---
 
-*Built with Selenium 4.31.0 · TestNG 7.8.0 · ExtentReports 5.1.2 · Java 17*
+Contact: biswas.bijit1994@gmail.com
+*Built with Selenium 4.44.0 · TestNG 7.11.0 · ExtentReports 5.1.2*

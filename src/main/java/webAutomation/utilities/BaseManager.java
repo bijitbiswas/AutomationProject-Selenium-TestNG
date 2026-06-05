@@ -12,9 +12,9 @@ public class BaseManager {
 
     private final DriverManager driverManager = new DriverManager(configurationManager);
 
-    public void beforeSuite(ITestContext context) {
+    public void beforeSuite() {
         System.out.println("********@BeforeSuite********");
-        reportingManager.setupExtentReport(context, configurationManager);
+        reportingManager.setupExtentReport(configurationManager);
     }
 
     public void beforeClass(ITestContext context) {
@@ -24,11 +24,11 @@ public class BaseManager {
 
     public void beforeMethod(ITestResult result) {
         System.out.println("********Started @BeforeMethod********");
-        driverManager.resetDriver();
+        driverManager.resetDriver(result);
         driverManager.getDriverContext().setExtentTest(reportingManager.createTest(result));
     }
 
-    public String[][] testData(Method method) {
+    public String[][] dataProvider(Method method) {
         System.out.println("********Getting test data for method: " + method.getName() + "********");
         return new ExcelManager().getMethodData(method.getName());
     }

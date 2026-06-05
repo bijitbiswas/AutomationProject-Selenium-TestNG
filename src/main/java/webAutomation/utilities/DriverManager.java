@@ -16,6 +16,9 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import webAutomation.actionUtilities.automationFunctions.GeneralFunction;
 
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
 import java.time.Duration;
 
 public class DriverManager extends GeneralFunction {
@@ -52,8 +55,10 @@ public class DriverManager extends GeneralFunction {
         }
     }
 
-    public void resetDriver() {
-        if (RetryAnalyzer.isRetrying()) {
+    public void resetDriver(ITestResult result) {
+        IRetryAnalyzer analyzer = result.getMethod().getRetryAnalyzer(result);
+        boolean isRetrying = analyzer instanceof RetryAnalyzer && ((RetryAnalyzer) analyzer).isRetrying();
+        if (isRetrying) {
             quitDriver();
             createDriver();
         }
