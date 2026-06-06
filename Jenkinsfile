@@ -58,7 +58,7 @@ pipeline {
         stage('Publish Extent HTML Report') {
             steps {
                 script {
-                    def reportPath = "${env.REPORT_DIR}/${params.SUITE}.html"
+                    def reportPath = "${env.REPORT_DIR}/Bijit_Automation.html"
                     if (!fileExists(reportPath)) {
                         error "❌ Report not found at: ${reportPath}"
                     }
@@ -69,7 +69,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${env.REPORT_DIR}",
-                    reportFiles: "${params.SUITE}.html",
+                    reportFiles: "Bijit_Automation.html",
                     reportName: 'Extent HTML Report'
                 ])
             }
