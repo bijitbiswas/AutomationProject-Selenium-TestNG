@@ -10,7 +10,8 @@ def writeConfigFile(browserName, workspace) {
     ApplicationURL=https://www.saucedemo.com/
     IsJenkinsRun=true
     WaitTime=10"""
-    writeFile(file: "${workspace}/config/config.properties", text: data)
+    sh "mkdir -p ${workspace}/src/test/resources"
+    writeFile(file: "${workspace}/src/test/resources/config.properties", text: data)
     echo "DEBUG: Config file is created"
 }
 

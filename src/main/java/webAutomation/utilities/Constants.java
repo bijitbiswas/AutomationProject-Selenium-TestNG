@@ -2,7 +2,6 @@ package webAutomation.utilities;
 
 public final class Constants {
 
-    public static final String TEST_DATA_EXCEL_PATH = "src/test/java/webAutomation/testData/Testdata.xlsx";
     public static final String TEST_DATA_EXCEL_SHEET_NAME = "Sheet1";
     public static final String EXTENT_REPORT_NAME = "Automation Execution Report";
     public static final String EXTENT_REPORT_DOCUMENT_TITLE = "Automation Test Report";

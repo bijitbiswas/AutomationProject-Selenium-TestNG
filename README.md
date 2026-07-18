@@ -8,11 +8,11 @@ A lightweight, scalable web UI automation framework built on **Selenium 4** and 
 
 - **Page Object Model (POM)** — Clean separation between test logic and UI interactions via page classes
 - **Interface-driven design** — Interaction, Validation, Reporting, and Web actions are defined as interfaces and injected into pages through `BasePage`, making the contract explicit and implementations swappable
-- **Data-driven testing** — Test data loaded from Excel (`.xlsx`) via Apache POI, mapped to test methods by name through a `@DataProvider`
+- **Data-driven testing** — Test data loaded from Excel (`.xlsx`) via Apache POI, mapped to test methods by name through a `@DataProvider`; test data folder is resolved automatically from the test class package name — no configuration required
 - **Retry mechanism** — Failed tests are automatically retried once (configurable) with a full browser restart to avoid stale state, using a thread-safe `ThreadLocal` counter
 - **Parallel execution** — Tests run concurrently at the `<test>` level via TestNG suite XML; each test class gets its own `DriverManager` instance
 - **Extent HTML Reports** — Step-level pass/fail logging with screenshots captured automatically on each test method completion
-- **Multi-browser support** — Chrome, Firefox, Edge, and Safari selectable via `config.properties` or Jenkins parameter
+- **Multi-browser support** — Chrome, Firefox, Edge, and Safari selectable via `config.properties`, system property, or environment variable
 - **CI/CD ready** — `Jenkinsfile` included with parameterised browser and suite selection, dynamic config generation, and report publishing
 
 ---
@@ -34,9 +34,6 @@ A lightweight, scalable web UI automation framework built on **Selenium 4** and 
 ```
 AutomationProject-Selenium-TestNG/
 │
-├── config/
-│   └── config.properties            # Browser, URL, wait time settings
-│
 ├── WebTestSuites/
 │   ├── SampleSuite.xml              # Parallel suite: SampleWebTest + SampleNewWebTest
 │   └── SampleRetrySuite.xml         # Retry suite: SampleRetryWebTest
@@ -49,9 +46,9 @@ AutomationProject-Selenium-TestNG/
 │   │       ├── BasePage.java            # Delegates all page actions to function classes
 │   │       ├── ContextManager.java      # Holds WebDriver, waits, and ExtentTest per thread
 │   │       ├── DriverManager.java       # Browser creation, quit, and retry reset
-│   │       ├── ConfigurationManager.java# Reads config.properties at startup
+│   │       ├── ConfigurationManager.java# Layered config resolution: system property → env var → classpath → JAR defaults
 │   │       ├── ReportingManager.java    # Extent report setup and step logging
-│   │       ├── ExcelManager.java        # Reads test data from Testdata.xlsx
+│   │       ├── ExcelManager.java        # Resolves Testdata.xlsx from classpath using test class package as folder name
 │   │       ├── RetryAnalyzer.java       # ThreadLocal retry counter logic
 │   │       ├── RetryListener.java       # Applies RetryAnalyzer to all tests via IAnnotationTransformer
 │   │       ├── Constants.java           # Shared constant values
@@ -77,13 +74,16 @@ AutomationProject-Selenium-TestNG/
 │       │   ├── SampleLoginBasePage.java
 │       │   └── SampleWebBasePage.java
 │       │
-│       ├── testcases/                   # Test classes (extend BaseTest)
-│       │   ├── SampleWebTest.java
-│       │   ├── SampleNewWebTest.java
-│       │   └── SampleRetryWebTest.java
-│       │
+│       └── testcases/                   # Test classes (extend BaseTest)
+│           ├── SampleWebTest.java
+│           ├── SampleNewWebTest.java
+│           └── SampleRetryWebTest.java
+│
+│   └── test/resources/
+│       ├── config.properties            # Your config (overrides JAR defaults)
 │       └── testData/
-│           └── Testdata.xlsx            # Excel test data (sheet per test method)
+│           └── webAutomation/           # Folder name = top-level package of your test classes
+│               └── Testdata.xlsx        # Excel test data (sheet name: Sheet1)
 │
 ├── Jenkinsfile                          # Parameterised Jenkins pipeline
 └── pom.xml
@@ -94,7 +94,8 @@ AutomationProject-Selenium-TestNG/
 ## Initial Setup
 
 1. Install prerequisites listed above and verify `mvn -v`.
-2. Configure `config/config.properties` as outlined in the **Configuration** section, including driver selection, capability details, and any optional wait settings.
+2. Create `src/test/resources/config.properties` in your project as outlined in the **Configuration** section.
+3. Create `src/test/resources/testData/{yourPackage}/Testdata.xlsx` where `{yourPackage}` matches the top-level package of your test classes (e.g. `webAutomation`).
 
 ---
 
@@ -196,7 +197,14 @@ public class LoginTest extends BaseTest {
 
 ### Step 4: Add Test Data
 
-Add test data to Testdata.xlsx in a sheet named with test name like `verifyLogin`. Add a row for every `@Test` method that uses `dataProvider = "getTestData"`, with the method name in the first column followed by the parameter values.
+The framework resolves test data automatically based on the **top-level package name** of the test class — no path configuration needed.
+
+| Test class package | Resolved file |
+|---|---|
+| `webAutomation.testcases` | `src/test/resources/testData/webAutomation/Testdata.xlsx` |
+| `webAutomationNew.testcases` | `src/test/resources/testData/webAutomationNew/Testdata.xlsx` |
+
+Create `Testdata.xlsx` under the matching folder. In sheet `Sheet1`, add a row for every `@Test` method that uses `dataProvider = "getTestData"`, with the method name in the first column followed by the parameter values.
 
 ```
 Sheet name : Sheet1
@@ -222,10 +230,16 @@ Add the test class to a suite file:
 ---
 
 ## Configuration
-1. Open / Create `config/config.properties` at root project directory.
+
+The framework resolves configuration in priority order — the first source that provides a value wins:
+JVM system property >> Environment variable >> `config.properties` on classpath >> JAR bundled defaults.
+
+### Recommended: classpath config file
+
+1. Create `src/test/resources/config.properties` in your project.
 2. Set `BrowserName` to one of `Chrome`, `Firefox`, `Edge`, `Safari`.
 3. Set `ApplicationURL` to the target web application.
-Sample `config/config.properties`:
+   Sample as below:
 ```properties
 # Accepted values: Chrome, Firefox, Edge, Safari
 BrowserName = Chrome
@@ -234,6 +248,18 @@ ApplicationURL = https://www.saucedemo.com/
 
 # Default wait time in seconds for explicit and fluent waits
 WaitTime = 10
+```
+
+### CI / command line override
+
+```bash
+# Override browser and URL without touching config.properties
+mvn clean test -DBrowserName=Edge -DApplicationURL=https://staging.your-app.com/
+
+# Or via environment variables
+export BROWSER_NAME=Edge
+export APPLICATION_URL=https://staging.your-app.com/
+mvn clean test
 ```
 
 ---
@@ -299,14 +325,15 @@ Screenshots are saved alongside the HTML report in the same `TestReport/` folder
 ## Troubleshooting Tips
 
 **Browser does not launch**
-- Verify the `BrowserName` value in `config.properties` exactly matches one of: `Chrome`, `Firefox`, `Edge`, `Safari` (case-sensitive).
+- Verify the `BrowserName` value exactly matches one of: `Chrome`, `Firefox`, `Edge`, `Safari` (case-sensitive). Check whichever source is active: `src/test/resources/config.properties`, `-DBrowserName`, or `BROWSER_NAME` env var.
 - Ensure the browser is installed and up to date. Selenium 4 uses browser-bundled drivers — no separate WebDriver download needed.
 
 **`NullPointerException` on `getDriverContext()`**
 - This usually means a page object is being instantiated before `@BeforeClass` completes. Ensure page objects are created inside `@Test` methods or after the driver is initialised, not as class-level field initialisers.
 
 **Test data not found / `@DataProvider` returns empty**
-- Check that the sheet name in `Testdata.xlsx` exactly matches the `@Test` method name (case-sensitive).
+- Ensure `Testdata.xlsx` is placed at `src/test/resources/testData/{topLevelPackage}/Testdata.xlsx` where `{topLevelPackage}` is the first segment of your test class package (e.g. `webAutomation` for `webAutomation.testcases.LoginTest`).
+- Check that the test method name in the first column of `Sheet1` exactly matches the `@Test` method name (case-sensitive).
 - Ensure the Excel file is saved and not open in another application at runtime.
 
 **Tests not retrying**
@@ -314,7 +341,7 @@ Screenshots are saved alongside the HTML report in the same `TestReport/` folder
 - Do not add `retryAnalyzer =` directly to `@Test` — the listener handles it globally. Mixing both causes double-registration.
 
 **Report not generated / Jenkins build fails at publish step**
-- Set `IsJenkinsRun=true` in `config.properties` (or via the Jenkinsfile's dynamic config step) so the report lands at the fixed `Report_Folder/` path Jenkins expects.
+- Set `IsJenkinsRun=true` via `-DIsJenkinsRun=true` (system property), `IS_JENKINS_RUN=true` (env var), or in `src/test/resources/config.properties` so the report lands at the fixed `Report_Folder/` path Jenkins expects.
 - Ensure the **Publish HTML Plugin** is installed in Jenkins.
 
 **Parallel tests interfering with each other**

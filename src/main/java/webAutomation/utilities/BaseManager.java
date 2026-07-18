@@ -30,7 +30,8 @@ public class BaseManager {
 
     public String[][] dataProvider(Method method) {
         System.out.println("********Getting test data for method: " + method.getName() + "********");
-        return new ExcelManager().getMethodData(method.getName());
+        String testDataFolder = method.getDeclaringClass().getPackageName().split("\\.")[0];
+        return new ExcelManager().getMethodData(method.getName(), testDataFolder);
     }
 
     public void afterMethod(ITestResult result) {

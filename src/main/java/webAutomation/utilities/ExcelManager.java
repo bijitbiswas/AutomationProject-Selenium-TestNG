@@ -4,19 +4,24 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ExcelManager {
 
     private XSSFSheet excelWSheet = null;
 
-    public String[][] getMethodData(String methodName) {
+    public String[][] getMethodData(String methodName, String testDataFolder) {
 
-        FileInputStream excelFile;
+        String resourcePath = "/testData/" + testDataFolder + "/Testdata.xlsx";
+        InputStream excelFile = ExcelManager.class.getResourceAsStream(resourcePath);
+        if (excelFile == null) {
+            throw new RuntimeException("Testdata.xlsx not found at classpath:" + resourcePath +
+                    ". Ensure src/test/resources/testData/" + testDataFolder + "/Testdata.xlsx exists in your project.");
+        }
+
         XSSFWorkbook excelWBook;
         try {
-            excelFile = new FileInputStream(Constants.TEST_DATA_EXCEL_PATH);
             excelWBook = new XSSFWorkbook(excelFile);
         } catch (IOException e) {
             throw new RuntimeException(e);
