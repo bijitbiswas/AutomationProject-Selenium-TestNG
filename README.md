@@ -135,38 +135,38 @@ Create a `BaseTest` extending `BaseManager` and call the delegated TestNG lifecy
 public class BaseTest extends BaseManager {
 
     @BeforeSuite
-    public void setupBeforeSuite(ITestContext context) {
-        beforeSuite(context);        // sets up Extent Report
+    public void onBeforeSuite() {
+        beforeSuite();
     }
 
     @BeforeClass
-    public void setupBeforeClass(ITestContext context) {
-        beforeClass(context);        // creates the WebDriver
+    public void onBeforeClass(ITestContext context) {
+        beforeClass(context);
     }
 
     @BeforeMethod
-    public void setupBeforeMethod(ITestResult result) {
-        beforeMethod(result);        // resets driver, creates test node in report
+    public void onBeforeMethod(ITestResult result) {
+        beforeMethod(result);
     }
 
     @DataProvider(name = "getTestData")
-    public String[][] getTestData(Method method) {
-        return testData(method);     // loads rows from Testdata.xlsx by method name
+    public String[][] onDataProvider(Method method) {
+        return dataProvider(method);
     }
 
     @AfterMethod
-    public void setupAfterMethod(ITestResult result) {
-        afterMethod(result);         // captures screenshot, logs pass/fail
+    public void onAfterMethod(ITestResult result) {
+        afterMethod(result);
     }
 
     @AfterClass(alwaysRun = true)
-    public void setupAfterClass() {
-        afterClass();                // quits the WebDriver
+    public void onAfterClass() {
+        afterClass();
     }
 
     @AfterSuite(alwaysRun = true)
-    public void setupAfterSuite() {
-        afterSuite();                // closes the Extent Report
+    public void onAfterSuite() {
+        afterSuite();
     }
 }
 ```

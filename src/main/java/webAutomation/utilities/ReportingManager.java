@@ -40,7 +40,7 @@ public class ReportingManager extends GeneralFunction {
         }
 
         // Get only the suite name
-        String suiteName = Paths.get("Bijit_Automation")
+        String suiteName = Paths.get("Selenium_Automation_Report")
                 .getFileName()
                 .toString().replace(".xml", "");
 
