@@ -19,15 +19,13 @@ A lightweight, scalable web UI automation framework built on **Selenium 4** and 
 
 ## Prerequisites
 
-| Tool | Version | Notes |
-|---|---|---|
-| Java JDK | 17 | Required |
-| Maven | 3.6+ | Required |
-| Chrome / Firefox / Edge / Safari | Latest stable | At least one required |
-| IntelliJ IDEA (or any IDE) | Any | Recommended |
-| Jenkins | 2.x+ | Only for CI/CD runs |
-
-> TestNG 7.8.0 is pinned in `pom.xml`. Versions 7.10.2 and above have a known incompatibility with `@BeforeMethod(ITestResult)` parameter injection — do not upgrade without testing.
+| Tool | Version | Notes                          |
+|---|---|--------------------------------|
+| Java JDK | 17 | Required                       |
+| Maven | 3.6+ | Required                       |
+| Chrome / Firefox / Edge / Safari | Latest stable | At least one required          |
+| IntelliJ IDEA (or any IDE) | Any | Recommended                    |
+| Jenkins | 2.x+ | Only for CI/CD runs (Optional) |
 
 ---
 
@@ -95,39 +93,16 @@ AutomationProject-Selenium-TestNG/
 
 ## Initial Setup
 
-**1. Clone the repository**
-```bash
-git clone https://github.com/bijitbiswas/AutomationProject-Selenium-TestNG.git
-cd AutomationProject-Selenium-TestNG
-```
-
-**2. Install dependencies**
-```bash
-mvn clean install -DskipTests
-```
-
-**3. Configure the browser and target URL**
-
-Edit `config/config.properties`:
-```properties
-# Accepted values: Chrome, Firefox, Edge, Safari
-BrowserName = Chrome
-
-ApplicationURL = https://www.saucedemo.com/
-
-# Default wait time in seconds for explicit and fluent waits
-WaitTime = 10
-```
-
-**4. Add test data**
-
-Open `src/test/java/webAutomation/testData/Testdata.xlsx`. Each sheet name must match the test method name that uses it. Columns map to the method parameters in order.
+1. Install prerequisites listed above and verify `mvn -v`.
+2. Configure `config/config.properties` as outlined in the **Configuration** section, including driver selection, capability details, and any optional wait settings.
 
 ---
 
 ## Writing Your First Test
 
-**1. Create a page class** extending `BasePage`:
+### Step 1: Create a Page Class
+
+Create a page class** extending `BasePage`. Pass the `ContextManager` received from the test class to the `super` constructor.
 
 ```java
 // src/test/java/webAutomation/pages/LoginPage.java
@@ -151,7 +126,9 @@ public class LoginPage extends BasePage {
 }
 ```
 
-**2. Create `BaseTest`** extending `BaseManager` and wiring each TestNG annotation to the corresponding `BaseManager` method:
+### Step 2: Create a BaseTest Class
+
+Create a `BaseTest` extending `BaseManager` and call the delegated TestNG lifecycle methods. **You never modify this class** — it is the fixed bridge between TestNG and the framework.
 
 ```java
 // src/test/java/webAutomation/BaseTest.java
@@ -194,9 +171,11 @@ public class BaseTest extends BaseManager {
 }
 ```
 
-> `BaseManager` (in `src/main`) owns all the logic. `BaseTest` (in `src/test`) is purely a thin TestNG adapter — it only maps annotations to `BaseManager` calls. This keeps framework infrastructure free of TestNG lifecycle coupling.
+> `BaseManager` owns all the logic. `BaseTest` (in `src/test`) is purely a thin TestNG adapter — it only maps annotations to `BaseManager` calls. This keeps framework infrastructure free of TestNG lifecycle coupling.
 
-**3. Create a test class** extending `BaseTest`:
+### Step 3: Create a Test Class
+
+Create a test class extending `BaseTest`.
 
 ```java
 // src/test/java/webAutomation/testcases/LoginTest.java
@@ -215,9 +194,22 @@ public class LoginTest extends BaseTest {
 }
 ```
 
-**4. Add test data** to `Testdata.xlsx` in a sheet named `verifyLogin` with one row per data set.
+### Step 4: Add Test Data
 
-**5. Register the class** in a suite XML under `WebTestSuites/`:
+Add test data to Testdata.xlsx in a sheet named with test name like `verifyLogin`. Add a row for every `@Test` method that uses `dataProvider = "getTestData"`, with the method name in the first column followed by the parameter values.
+
+```
+Sheet name : Sheet1
+┌───────────────┬──────────────┬──────────────┐
+│ TestCaseName  │ username     │ password     │
+├───────────────┼──────────────┼──────────────┤
+│ verifyLogin   │ standard_user│ secret_sauce │
+└───────────────┴──────────────┴──────────────┘
+```
+
+### Step 5: Register in Suite XML
+
+Add the test class to a suite file:
 
 ```xml
 <test name="Login Tests">
@@ -227,7 +219,22 @@ public class LoginTest extends BaseTest {
 </test>
 ```
 
-> All `@Before*` / `@After*` lifecycle methods, the `@DataProvider`, and the retry listener are inherited automatically from `BaseTest` — no additional wiring needed.
+---
+
+## Configuration
+1. Open / Create `config/config.properties` at root project directory.
+2. Set `BrowserName` to one of `Chrome`, `Firefox`, `Edge`, `Safari`.
+3. Set `ApplicationURL` to the target web application.
+Sample `config/config.properties`:
+```properties
+# Accepted values: Chrome, Firefox, Edge, Safari
+BrowserName = Chrome
+
+ApplicationURL = https://www.saucedemo.com/
+
+# Default wait time in seconds for explicit and fluent waits
+WaitTime = 10
+```
 
 ---
 
