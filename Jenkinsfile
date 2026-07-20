@@ -4,11 +4,12 @@
 def listBROWSER_NAMES = ["Firefox", "Chrome", "Edge", "Safari"]
 def listSUITE_NAMES = ["SampleSuite", "SampleRetrySuite"]
 
-def writeConfigFile(browserName, workspace) {
+def writeConfigFile(browserName, headless, workspace) {
     echo "DEBUG: Creating config file"
     def data = """BrowserName=${browserName}
     ApplicationURL=https://www.saucedemo.com/
     IsJenkinsRun=true
+    Headless=${headless}
     WaitTime=10"""
     sh "mkdir -p ${workspace}/src/test/resources"
     writeFile(file: "${workspace}/src/test/resources/config.properties", text: data)
@@ -33,6 +34,11 @@ pipeline {
             choices: listSUITE_NAMES,
             description: 'Required * Select SUITE containing the tests'
         )
+        booleanParam(
+            name: 'HEADLESS',
+            defaultValue: true,
+            description: 'Run browser in headless mode (recommended for CI). Not supported on Safari.'
+        )
     }
 
     stages {
@@ -45,7 +51,7 @@ pipeline {
         stage('Generate configuration file') {
             steps{
                 script{
-                    writeConfigFile(params.BROWSER_NAME, env.WORKSPACE)
+                    writeConfigFile(params.BROWSER_NAME, params.HEADLESS, env.WORKSPACE)
                 }
             }
         }
@@ -59,7 +65,7 @@ pipeline {
         stage('Publish Extent HTML Report') {
             steps {
                 script {
-                    def reportPath = "${env.REPORT_DIR}/Appium_Automation_Report.html"
+                    def reportPath = "${env.REPORT_DIR}/Selenium_Automation_Report.html"
                     if (!fileExists(reportPath)) {
                         error "❌ Report not found at: ${reportPath}"
                     }
@@ -70,7 +76,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: "${env.REPORT_DIR}",
-                    reportFiles: "Appium_Automation_Report.html",
+                    reportFiles: "Selenium_Automation_Report.html",
                     reportName: 'Extent HTML Report'
                 ])
             }

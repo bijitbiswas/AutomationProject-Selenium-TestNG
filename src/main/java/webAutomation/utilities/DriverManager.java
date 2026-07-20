@@ -76,7 +76,7 @@ public class DriverManager extends GeneralFunction {
             case "Edge" -> new EdgeDriver(getEdgeOptions());
             case "Safari" -> new SafariDriver(getSafariOptions());
             case "Firefox" -> new FirefoxDriver(getFirefoxOptions());
-            default -> null;
+            default -> throw new IllegalArgumentException("Unsupported browser: " + configurationManager.browserName);
         };
 
         println("Driver created successfully");
@@ -87,6 +87,10 @@ public class DriverManager extends GeneralFunction {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--incognito");
         options.addArguments("--disable-extensions");
+        if (configurationManager.isHeadless) {
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
+        }
         options.setPageLoadTimeout(Duration.ofSeconds(configurationManager.waitTime));
         return options;
     }
@@ -94,12 +98,17 @@ public class DriverManager extends GeneralFunction {
     private FirefoxOptions getFirefoxOptions() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("-private");
-//        options.addArguments("--disable-extensions");
+        if (configurationManager.isHeadless) {
+            options.addArguments("-headless");
+        }
         options.setPageLoadTimeout(Duration.ofSeconds(configurationManager.waitTime));
         return options;
     }
 
     private SafariOptions getSafariOptions() {
+        if (configurationManager.isHeadless) {
+            println("WARNING: Safari does not support headless mode. Running in normal mode.");
+        }
         SafariOptions options = new SafariOptions();
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
         options.setPageLoadTimeout(Duration.ofSeconds(configurationManager.waitTime));
@@ -109,6 +118,10 @@ public class DriverManager extends GeneralFunction {
     private EdgeOptions getEdgeOptions() {
         EdgeOptions options = new EdgeOptions();
         options.addArguments("inprivate");
+        if (configurationManager.isHeadless) {
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
+        }
         options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
         options.setPageLoadTimeout(Duration.ofSeconds(configurationManager.waitTime));
         return options;

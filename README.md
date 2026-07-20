@@ -12,8 +12,8 @@ A lightweight, scalable web UI automation framework built on **Selenium 4** and 
 - **Retry mechanism** — Failed tests are automatically retried once (configurable) with a full browser restart to avoid stale state, using a thread-safe `ThreadLocal` counter
 - **Parallel execution** — Tests run concurrently at the `<test>` level via TestNG suite XML; each test class gets its own `DriverManager` instance
 - **Extent HTML Reports** — Step-level pass/fail logging with screenshots captured automatically on each test method completion
-- **Multi-browser support** — Chrome, Firefox, Edge, and Safari selectable via `config.properties`, system property, or environment variable
-- **CI/CD ready** — `Jenkinsfile` included with parameterised browser and suite selection, dynamic config generation, and report publishing
+- **Multi-browser support** — Chrome, Firefox, Edge, and Safari selectable via `config.properties`, system property, or environment variable; headless mode available for Chrome, Firefox, and Edge
+- **CI/CD ready** — `Jenkinsfile` included with parameterised browser and suite selection, headless checkbox, dynamic config generation, and report publishing
 
 ---
 
@@ -248,6 +248,9 @@ ApplicationURL = https://www.saucedemo.com/
 
 # Default wait time in seconds for explicit and fluent waits
 WaitTime = 10
+
+# Run browser without a UI (true/false). Not supported on Safari.
+Headless = false
 ```
 
 ### CI / command line override
@@ -256,9 +259,13 @@ WaitTime = 10
 # Override browser and URL without touching config.properties
 mvn clean test -DBrowserName=Edge -DApplicationURL=https://staging.your-app.com/
 
+# Run headless
+mvn clean test -DHeadless=true
+
 # Or via environment variables
 export BROWSER_NAME=Edge
 export APPLICATION_URL=https://staging.your-app.com/
+export HEADLESS=true
 mvn clean test
 ```
 
@@ -287,6 +294,7 @@ The `Jenkinsfile` exposes two pipeline parameters:
 |---|---|
 | `BROWSER_NAME` | Chrome, Firefox, Edge, Safari |
 | `SUITE` | SampleSuite, SampleRetrySuite |
+| `HEADLESS` | true (default), false |
 
 Trigger a build in Jenkins, select the parameters, and the pipeline will configure, execute, and publish the report automatically.
 

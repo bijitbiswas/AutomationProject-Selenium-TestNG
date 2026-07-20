@@ -92,7 +92,7 @@ public class ValidationFunction extends GeneralFunction implements ValidationInt
 
     @Override
     public boolean isElementVisibleByText(String textValue) {
-        String xpathExpression = "//*[contains(text(),'" + textValue + "')]";
+        String xpathExpression = "//*[contains(text(),\"" + textValue + "\")]";
         return conditionCheck( webDriverWait ->
                 webDriverWait.until(ExpectedConditions.refreshed(ExpectedConditions
                         .visibilityOfElementLocated(By.xpath(xpathExpression)))), "visibleByText");
@@ -133,7 +133,7 @@ public class ValidationFunction extends GeneralFunction implements ValidationInt
     @Override
     public void validateText(String expectedText) {
         println("Validating element text to be "+expectedText+" on screen");
-        String xpathExpression = "//*[contains(text(),'" + expectedText + "')]";
+        String xpathExpression = "//*[contains(text(),\"" + expectedText + "\")]";
         Assert.assertTrue(isElementVisibleByXpath(xpathExpression), "Element text " +
                 expectedText+" is not displayed on screen");
         println("Element text "+expectedText+" is displayed on screen");

@@ -76,7 +76,7 @@ public class InteractionFunction extends GeneralFunction implements InteractionI
         WebElement actionElement;
         try {
             actionElement = fluentWait.until(ExpectedConditions.refreshed(ExpectedConditions
-                    .visibilityOfElementLocated(By.xpath("//*[text()='" + elementText + "']"))));
+                    .visibilityOfElementLocated(By.xpath("//*[text()=\"" + elementText + "\"]"))));
         } catch (TimeoutException e) {
             logger.error("Failed to find element "+elementText+" to click", e);
             throw e;

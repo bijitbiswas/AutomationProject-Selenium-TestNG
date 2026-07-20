@@ -16,6 +16,7 @@ public class ConfigurationManager extends GeneralFunction {
     final Long waitTime = getWaitTime();
     final String applicationURL = getApplicationURL();
     final boolean isJenkinsRun = getIsJenkinsRun();
+    final boolean isHeadless = getIsHeadless();
 
     // Resolution order (highest priority wins):
     //   1. JVM system property   -DKey=value
@@ -90,5 +91,9 @@ public class ConfigurationManager extends GeneralFunction {
 
     private boolean getIsJenkinsRun() {
         return Boolean.parseBoolean(resolve("IsJenkinsRun"));
+    }
+
+    private boolean getIsHeadless() {
+        return Boolean.parseBoolean(resolve("Headless"));
     }
 }
