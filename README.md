@@ -151,7 +151,7 @@ public class BaseTest extends BaseManager {
     }
 
     @DataProvider(name = "getTestData")
-    public String[][] onDataProvider(Method method) {
+    public Object[][] onDataProvider(Method method) {
         return dataProvider(method);
     }
 
@@ -239,6 +239,7 @@ JVM system property >> Environment variable >> `config.properties` on classpath 
 1. Create `src/test/resources/config.properties` in your project.
 2. Set `BrowserName` to one of `Chrome`, `Firefox`, `Edge`, `Safari`.
 3. Set `ApplicationURL` to the target web application.
+4. Set `Headless` to `true` to start in headless mode . Supported in Firefox and Chrome 
    Sample as below:
 ```properties
 # Accepted values: Chrome, Firefox, Edge, Safari
